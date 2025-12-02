@@ -1,0 +1,4052 @@
+{
+	"info": {
+		"_postman_id": "47781331-a87085a4-e172-40b1-be86-060eb266d5e2",
+		"name": "Provider",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "User register",
+					"item": [
+						{
+							"name": "user register",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c3a566b8-d032-4bad-941f-e508938fac64",
+										"exec": [
+											"let response = pm.response;\r",
+											"let json = response.json();  // Parsed response body\r",
+											"\r",
+											"// 1️⃣ Status Code & Success\r",
+											"pm.test(\"Status code is 200\", () => pm.expect(response.code).to.equal(200));\r",
+											"pm.test(\"Success flag is true\", () => pm.expect(json.success).to.be.true);\r",
+											"\r",
+											"// 2️⃣ Message & Token\r",
+											"pm.test(\"Message validation\", () => {\r",
+											"    pm.expect(json.message).to.be.a(\"string\");\r",
+											"    pm.expect(json.message.length).to.be.greaterThan(0); // works for dynamic messages\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Token exists\", () => {\r",
+											"    pm.expect(json.token).to.exist;\r",
+											"    pm.expect(json.token).to.be.a(\"string\");\r",
+											"    pm.expect(json.token.length).to.be.above(20);\r",
+											"});\r",
+											"\r",
+											"// 3️⃣ User Object\r",
+											"pm.test(\"User object exists\", () => pm.expect(json.user).to.be.an(\"object\"));\r",
+											"\r",
+											"// 4️⃣ User Fields Validation\r",
+											"const stringFields = [\"_id\", \"fullName\", \"email\", \"mobileNumber\", \"userId\", \"packageStatus\"];\r",
+											"const booleanFields = [\r",
+											"    \"personalDetailsCompleted\", \"additionalDetailsCompleted\", \"addressCompleted\",\r",
+											"    \"isAgree\", \"isEmailVerified\", \"isMobileVerified\", \"packageActive\",\r",
+											"    \"isCommissionDistribute\", \"isDeleted\"\r",
+											"];\r",
+											"const arrayFields = [\"myTeams\", \"favoriteServices\", \"favoriteProviders\", \"fcmTokens\"];\r",
+											"\r",
+											"pm.test(\"String fields validation\", () => {\r",
+											"    stringFields.forEach(f => pm.expect(json.user[f], `${f} should be string`).to.be.a(\"string\"));\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Boolean fields validation\", () => {\r",
+											"    booleanFields.forEach(f => pm.expect(json.user[f], `${f} should be boolean`).to.be.a(\"boolean\"));\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Array fields validation\", () => {\r",
+											"    arrayFields.forEach(f => pm.expect(json.user[f], `${f} should be array`).to.be.an(\"array\"));\r",
+											"});\r",
+											"\r",
+											"// 5️⃣ OTP Object\r",
+											"pm.test(\"OTP validation\", () => {\r",
+											"    if(json.user.otp){\r",
+											"        pm.expect(json.user.otp).to.be.an(\"object\");\r",
+											"        pm.expect(json.user.otp.verified).to.be.a(\"boolean\");\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"// 6️⃣ Date Fields\r",
+											"const dateFields = [\"createdAt\", \"updatedAt\"];\r",
+											"pm.test(\"Date fields validation\", () => {\r",
+											"    dateFields.forEach(f => pm.expect(json.user[f], `${f} should be string`).to.be.a(\"string\"));\r",
+											"    if(json.user.packageActivateDate !== null){\r",
+											"        pm.expect(json.user.packageActivateDate).to.be.a(\"string\");\r",
+											"    }\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "fce1c039-0992-405d-9d0c-38637ff693a9",
+										"exec": [
+											"const randomNum = Math.floor(Math.random() * 10000);\r",
+											"pm.environment.set(\"randomEmail\", `user${randomNum}@test.com`);\r",
+											"pm.environment.set(\"randomMobile\", `+9195${Math.floor(10000000 + Math.random() * 90000000)}`);\r",
+											"pm.environment.set(\"fullName\", `user${randomNum}`);"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"id": "47781331-bd542773-a875-4121-8958-04756b3daa9c",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"fullName\": \"{{$randomFullName}}\",\r\n  \"email\": \"{{randomEmail}}\",\r\n  \"mobileNumber\": \"{{randomMobile}}\",\r\n  \"password\": \"Priyanka@123\",\r\n  \"confirmPassword\": \"Priyanka@123\",\r\n  \"isAgree\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/auth/register",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"id": "47781331-11334978-2ecf-4d41-8158-4315890f98ec"
+				},
+				{
+					"name": "User login",
+					"item": [
+						{
+							"name": "login user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "9ea5c0f9-8d1a-428f-98e8-7c98ba69666a",
+										"exec": [
+											"let res=pm.response;\r",
+											"let json={};\r",
+											"try{\r",
+											"    json=res.json();\r",
+											"}catch(e){\r",
+											"    console.log(e);\r",
+											"}\r",
+											"\r",
+											"pm.test(\"sts check\",()=>{\r",
+											"    pm.expect(res.code).to.be.oneOf([200,201]);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"message\",()=>{\r",
+											"   pm.expect(json.message.toLowerCase()).to.include(\"login successful\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"token\",()=>{\r",
+											"   pm.expect(json.token).to.not.be.null;\r",
+											"   pm.expect(json.token).to.be.a(\"string\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"User object exists\", () => {\r",
+											"    pm.expect(json.user).to.be.an(\"object\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Required user fields validation\", () => {\r",
+											"    pm.expect(json.user._id).to.be.a(\"string\");\r",
+											"    pm.expect(json.user.fullName).to.be.a(\"string\");\r",
+											"    pm.expect(json.user.email).to.be.a(\"string\");\r",
+											"    pm.expect(json.user.mobileNumber).to.be.a(\"string\");\r",
+											"    pm.expect(json.user.userId).to.be.a(\"string\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											"// --------------------\r",
+											"// 4️⃣ BOOLEAN FIELDS CHECK\r",
+											"// --------------------\r",
+											"pm.test(\"Boolean field validation\", () => {\r",
+											"    pm.expect(json.user.personalDetailsCompleted).to.be.a(\"boolean\");\r",
+											"    pm.expect(json.user.additionalDetailsCompleted).to.be.a(\"boolean\");\r",
+											"    pm.expect(json.user.addressCompleted).to.be.a(\"boolean\");\r",
+											"    pm.expect(json.user.isAgree).to.be.a(\"boolean\");\r",
+											"    pm.expect(json.user.isEmailVerified).to.be.a(\"boolean\");\r",
+											"    pm.expect(json.user.isMobileVerified).to.be.a(\"boolean\");\r",
+											"    pm.expect(json.user.packageActive).to.be.a(\"boolean\");\r",
+											"    pm.expect(json.user.isCommissionDistribute).to.be.a(\"boolean\");\r",
+											"    pm.expect(json.user.isDeleted).to.be.a(\"boolean\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											"// --------------------\r",
+											"// 5️⃣ ARRAY FIELDS CHECK\r",
+											"// --------------------\r",
+											"pm.test(\"Array fields validation\", () => {\r",
+											"    pm.expect(json.user.myTeams).to.be.an(\"array\");\r",
+											"    pm.expect(json.user.serviceCustomers).to.be.an(\"array\");\r",
+											"    pm.expect(json.user.favoriteServices).to.be.an(\"array\");\r",
+											"    pm.expect(json.user.favoriteProviders).to.be.an(\"array\");\r",
+											"    pm.expect(json.user.fcmTokens).to.be.an(\"array\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											"// --------------------\r",
+											"// 6️⃣ PACKAGE DETAILS CHECK\r",
+											"// --------------------\r",
+											"pm.test(\"Package fields validation\", () => {\r",
+											"    pm.expect(json.user.packageAmountPaid).to.be.a(\"number\");\r",
+											"    pm.expect(json.user.remainingAmount).to.be.a(\"number\");\r",
+											"    pm.expect(json.user.packagePrice).to.be.a(\"number\");\r",
+											"\r",
+											"    if (json.user.packageType !== null) {\r",
+											"        pm.expect(json.user.packageType).to.be.a(\"string\");\r",
+											"    }\r",
+											"\r",
+											"    pm.expect(json.user.packageStatus).to.be.a(\"string\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											"// --------------------\r",
+											"// 7️⃣ DATE CHECK\r",
+											"// --------------------\r",
+											"pm.test(\"Validate date fields\", () => {\r",
+											"    pm.expect(json.user.createdAt).to.be.a(\"string\");\r",
+											"    pm.expect(json.user.updatedAt).to.be.a(\"string\");\r",
+											"\r",
+											"    if (json.user.packageActivateDate !== null) {\r",
+											"        pm.expect(json.user.packageActivateDate).to.be.a(\"string\");\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"\r",
+											"// --------------------\r",
+											"// 8️⃣ VERSION CHECK\r",
+											"// --------------------\r",
+											"pm.test(\"Version exists\", () => {\r",
+											"    pm.expect(json.user.__v).to.be.a(\"number\");\r",
+											"});\r",
+											"\r",
+											"/*\r",
+											"// 4️⃣ Required String Fields\r",
+											"// --------------------\r",
+											"const stringFields = [\"_id\", \"fullName\", \"email\", \"mobileNumber\", \"userId\", \"packageStatus\"];\r",
+											"pm.test(\"String fields validation\", () => {\r",
+											"    stringFields.forEach(field => {\r",
+											"        // ${field} dynamically inserts the field name into the test message\r",
+											"        pm.expect(json.user[field], `${field} should be a string`).to.be.a(\"string\");\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"// --------------------\r",
+											"// 5️⃣ Boolean Fields\r",
+											"// --------------------\r",
+											"const booleanFields = [\r",
+											"    \"personalDetailsCompleted\", \"additionalDetailsCompleted\", \"addressCompleted\",\r",
+											"    \"isAgree\", \"isEmailVerified\", \"isMobileVerified\",\r",
+											"    \"packageActive\", \"isCommissionDistribute\", \"isDeleted\"\r",
+											"];\r",
+											"pm.test(\"Boolean fields validation\", () => {\r",
+											"    booleanFields.forEach(field => {\r",
+											"        pm.expect(json.user[field], `${field} should be boolean`).to.be.a(\"boolean\");\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"// --------------------\r",
+											"// 6️⃣ Array Fields\r",
+											"// --------------------\r",
+											"const arrayFields = [\"myTeams\", \"serviceCustomers\", \"favoriteServices\", \"favoriteProviders\", \"fcmTokens\"];\r",
+											"pm.test(\"Array fields validation\", () => {\r",
+											"    arrayFields.forEach(field => {\r",
+											"        pm.expect(json.user[field], `${field} should be an array`).to.be.an(\"array\");\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"// --------------------\r",
+											"// 7️⃣ Number Fields\r",
+											"// --------------------\r",
+											"const numberFields = [\"packageAmountPaid\", \"remainingAmount\", \"packagePrice\"];\r",
+											"pm.test(\"Number fields validation\", () => {\r",
+											"    numberFields.forEach(field => {\r",
+											"        pm.expect(json.user[field], `${field} should be a number`).to.be.a(\"number\");\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"// --------------------\r",
+											"// 8️⃣ Optional Fields\r",
+											"// --------------------\r",
+											"pm.test(\"Optional fields validation\", () => {\r",
+											"    if (json.user.packageType !== null) {\r",
+											"        pm.expect(json.user.packageType, \"packageType should be string\").to.be.a(\"string\");\r",
+											"    }\r",
+											"    if (json.user.packageActivateDate !== null) {\r",
+											"        pm.expect(json.user.packageActivateDate, \"packageActivateDate should be string\").to.be.a(\"string\");\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"// --------------------\r",
+											"// 9️⃣ Date Fields\r",
+											"// --------------------\r",
+											"const dateFields = [\"createdAt\", \"updatedAt\"];\r",
+											"pm.test(\"Date fields validation\", () => {\r",
+											"    dateFields.forEach(field => {\r",
+											"        pm.expect(json.user[field], `${field} should be date string`).to.be.a(\"string\");\r",
+											"    });\r",
+											"});\r",
+											"\r",
+											"// --------------------\r",
+											"// 🔟 Version Field\r",
+											"// --------------------\r",
+											"pm.test(\"__v exists and is number\", () => {\r",
+											"    pm.expect(json.user.__v, \"__v should be a number\").to.be.a(\"number\");\r",
+											"});\r",
+											"*/"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"id": "47781331-0ed0cd77-ec76-41c3-9cf1-58a77d13ad54",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"user901@test.com\",\r\n  \"password\": \"Priyanka@123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://biz-booster.vercel.app/api/auth/login",
+									"protocol": "https",
+									"host": [
+										"biz-booster",
+										"vercel",
+										"app"
+									],
+									"path": [
+										"api",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"id": "47781331-2394622c-d4c2-4b19-b8c6-d4748911a2d5"
+				},
+				{
+					"name": "Service customer",
+					"item": [
+						{
+							"name": "details serv custom",
+							"id": "47781331-2d16525a-4790-49e2-9bcb-f7d00fec8030",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://biz-booster.vercel.app/api/service-customer/69269ea4fd77692d61888c94",
+									"protocol": "https",
+									"host": [
+										"biz-booster",
+										"vercel",
+										"app"
+									],
+									"path": [
+										"api",
+										"service-customer",
+										"69269ea4fd77692d61888c94"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add service customer",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "08ad6960-e726-4021-a497-38d499bbb798",
+										"exec": [
+											"// ---------- Random 10 Digit Phone Number ----------\r",
+											"const randomMobile = Math.floor(6000000000 + Math.random() * 4000000000);\r",
+											"pm.environment.set(\"randomMobile\", randomMobile);\r",
+											"\r",
+											"// ---------- Random First Name ----------\r",
+											"const firstNames = [\"Aarav\", \"Vihaan\", \"Aryan\", \"Kabir\", \"Rohan\", \"Sam\", \"Kunal\", \"Rahul\", \"Arjun\", \"Ranveer\"];\r",
+											"const randomFirstName = firstNames[Math.floor(Math.random() * firstNames.length)];\r",
+											"pm.environment.set(\"firstName\", randomFirstName);\r",
+											"\r",
+											"// ---------- Random Email ----------\r",
+											"const randomNum = Math.floor(Math.random() * 100000);\r",
+											"const randomEmail = `${randomFirstName.toLowerCase()}${randomNum}@test.com`;\r",
+											"pm.environment.set(\"randomEmail\", randomEmail);\r",
+											"console.log({\r",
+											"    phone: randomMobile,\r",
+											"    name: randomFirstName,\r",
+											"    email: randomEmail,\r",
+											"    \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "aeee4dd7-f559-487e-969c-7805dc02ed3e",
+										"exec": [
+											"let res=pm.response;\r",
+											"let json={};\r",
+											"try{\r",
+											"    json=res.json();\r",
+											"}catch(e)\r",
+											"{\r",
+											"    console.log(e);\r",
+											"}\r",
+											"pm.test(\"sts code\",()=>{\r",
+											"    pm.expect(res.code).to.be.oneOf([200,201]);\r",
+											"});\r",
+											"pm.test(\"success\",()=>{\r",
+											"    pm.expect(json).to.have.property(\"success\");\r",
+											"    pm.expect(json.success).to.be.a(\"boolean\");\r",
+											"    pm.expect(json.success).to.be.true;\r",
+											"});\r",
+											"pm.test(\"data object exist\",()=>{\r",
+											"    pm.expect(json).to.have.property(\"data\");\r",
+											"    pm.expect(json.data).to.be.an(\"object\").and.not.empty;\r",
+											"    pm.expect(json.data.fullName).to.be.an(\"string\").and.not.empty;\r",
+											"    pm.expect(json.data.phone).to.be.an(\"string\").and.not.empty;\r",
+											"    pm.expect(json.data.email).to.be.an(\"string\").and.not.empty;\r",
+											"    //pm.expect(json.data.description).to.be.an(\"string\");\r",
+											"     pm.expect(json.data.description === null || typeof json.data.description === \"string\").to.be.true; \r",
+											"    pm.expect(json.data.address).to.be.an(\"string\").and.not.empty;\r",
+											"    pm.expect(json.data.city).to.be.an(\"string\").and.not.empty;\r",
+											"    pm.expect(json.data.state).to.be.an(\"string\").and.not.empty;\r",
+											"    pm.expect(json.data.country).to.be.an(\"string\").and.not.empty;\r",
+											"\r",
+											"    pm.expect(json.data).to.have.property(\"otp\").and.not.empty;\r",
+											"    pm.expect(json.data.otp).to.be.an(\"object\");\r",
+											"    pm.expect(json.data.otp.verified).to.be.a(\"boolean\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"id": "47781331-cf4ca17c-3c99-40d2-bc59-14fe36dd2e94",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "fullName",
+											"value": "{{$randomFullName}}",
+											"type": "text",
+											"uuid": "3b16cb60-48c9-4ef8-a8da-509caae73a80"
+										},
+										{
+											"key": "phone",
+											"value": "{{randomMobile}}",
+											"type": "text",
+											"uuid": "fcbf8d05-47a4-42a5-99ed-98a128337e7c"
+										},
+										{
+											"key": "email",
+											"value": "{{randomEmail}}",
+											"type": "text",
+											"uuid": "057ca69f-7119-4309-9adc-d497b36b7686"
+										},
+										{
+											"key": "address",
+											"value": "123, hadpsar, pune",
+											"type": "text",
+											"uuid": "8084ba29-4712-4ba5-8f2a-7ec86aa53d58"
+										},
+										{
+											"key": "city",
+											"value": "pune",
+											"type": "text",
+											"uuid": "9735038a-1704-4433-a374-5885a1b95849"
+										},
+										{
+											"key": "state",
+											"value": "maharashtra",
+											"type": "text",
+											"uuid": "e789a4a6-f0b8-4363-bc4b-db249448a86b"
+										},
+										{
+											"key": "country",
+											"value": "india",
+											"type": "text",
+											"uuid": "07d2a522-6a91-4469-855b-510025fcee55"
+										},
+										{
+											"key": "user",
+											"value": "6927fe32c14f473b373111df",
+											"type": "text",
+											"uuid": "ed7923bb-4c90-4f45-ad96-dbd4f7b2c68d"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://biz-booster.vercel.app/api/service-customer",
+									"protocol": "https",
+									"host": [
+										"biz-booster",
+										"vercel",
+										"app"
+									],
+									"path": [
+										"api",
+										"service-customer"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"id": "47781331-30ff33ae-d5a9-4b67-96d9-6fa83af3cee5"
+				},
+				{
+					"name": "Provider",
+					"item": [
+						{
+							"name": "Register",
+							"item": [
+								{
+									"name": "valid Register",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "c86b1ddb-a262-4756-8c90-a12b9a81d2da",
+												"exec": [
+													"\r",
+													"let json={};\r",
+													"try\r",
+													"{\r",
+													"  json=pm.response.json();\r",
+													"}\r",
+													"catch(e)\r",
+													"{\r",
+													"    console.log(e);\r",
+													"}\r",
+													"\r",
+													"pm.test(\"status code\",()=>{\r",
+													"    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"message\",()=>{\r",
+													"    pm.expect(json.message.toLowerCase()).to.include(\"registered\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"provider object exist\",()=>{\r",
+													"    pm.expect(json).to.have.property(\"provider\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"provider field exist\",()=>{\r",
+													"    pm.expect(json.provider).to.have.property(\"fullName\");\r",
+													"    pm.expect(json.provider).to.have.property(\"phoneNo\");\r",
+													"    pm.expect(json.provider).to.have.property(\"email\");\r",
+													"    pm.expect(json.provider).to.have.property(\"password\");\r",
+													"    pm.expect(json.provider).to.have.property(\"registrationStatus\");\r",
+													"    pm.expect(json.provider).to.have.property(\"_id\");\r",
+													"    pm.expect(json.provider).to.have.property(\"createdAt\");\r",
+													"    pm.expect(json.provider).to.have.property(\"updatedAt\");\r",
+													"    pm.expect(json.provider).to.have.property(\"providerId\");\r",
+													"    pm.expect(json.provider).to.have.property(\"__v\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"fields type\",()=>{\r",
+													"    pm.expect(json.provider.fullName).to.be.a(\"string\").and.not.empty;\r",
+													"    pm.expect(json.provider.phoneNo).to.be.a(\"string\").and.not.empty;\r",
+													"    pm.expect(json.provider.email).to.be.a(\"string\").and.not.empty;\r",
+													"    pm.expect(json.provider.password).to.be.a(\"string\").and.not.empty;\r",
+													"    pm.expect(json.provider.registrationStatus).to.be.a(\"string\").and.not.empty;\r",
+													"    pm.expect(json.provider._id).to.be.a(\"string\").and.not.empty;\r",
+													"    pm.expect(json.provider.createdAt).to.be.a(\"string\").and.not.empty;\r",
+													"    pm.expect(json.provider.updatedAt).to.be.a(\"string\").and.not.empty;\r",
+													"    pm.expect(json.provider.providerId).to.be.a(\"string\").and.not.empty;\r",
+													"});\r",
+													"    pm.test(\"number fields\",()=>{\r",
+													"    pm.expect(json.provider.__v).to.be.a(\"number\");\r",
+													"    pm.expect(json.provider.averageRating).to.be.a(\"number\");\r",
+													"    pm.expect(json.provider.totalReviews).to.be.a(\"number\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Arrays are empty \", () => {\r",
+													"    pm.expect(json.provider.galleryImages).to.be.an(\"array\").that.is.empty;\r",
+													"    pm.expect(json.provider.subscribedServices).to.be.an(\"array\").that.is.empty;\r",
+													"});\r",
+													"\r",
+													"\r",
+													"pm.test(\"boolean fields\",()=>{\r",
+													"    pm.expect(json.provider.isRejected).to.be.a(\"boolean\");\r",
+													"    pm.expect(json.provider.isApproved).to.be.a(\"boolean\");\r",
+													"    pm.expect(json.provider.isVerified).to.be.a(\"boolean\");\r",
+													"    pm.expect(json.provider.isDeleted).to.be.a(\"boolean\");\r",
+													"    pm.expect(json.provider.isStoreOpen).to.be.a(\"boolean\");\r",
+													"    pm.expect(json.provider.step1Completed).to.be.a(\"boolean\");\r",
+													"    pm.expect(json.provider.storeInfoCompleted).to.be.a(\"boolean\");\r",
+													"    pm.expect(json.provider.kycCompleted).to.be.a(\"boolean\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"token exists\",()=>{\r",
+													"    pm.expect(json).to.have.property(\"token\");\r",
+													"    pm.expect(json.token).to.be.a(\"string\").and.not.empty;\r",
+													"})\r",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {},
+												"requests": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "0ab21836-76b2-475e-be25-164875955241",
+												"exec": [
+													"const randomNum = Math.floor(Math.random() * 10000);\r",
+													"pm.environment.set(\"randomEmail\", `user${randomNum}@test.com`);\r",
+													"pm.environment.set(\"randomMobile\", `+9195${Math.floor(10000000 + Math.random() * 90000000)}`);\r",
+													"pm.environment.set(\"fullName\", `user${randomNum}`);"
+												],
+												"type": "text/javascript",
+												"packages": {},
+												"requests": {}
+											}
+										}
+									],
+									"id": "47781331-34a42820-5047-4ff2-9f06-5f5e8e02204a",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "email",
+													"value": "{{randomEmail}}",
+													"type": "text",
+													"uuid": "466c4ffb-f301-4d5f-9f73-72a87e44a274"
+												},
+												{
+													"key": "fullName",
+													"value": "{{$randomFullName}}",
+													"type": "text",
+													"uuid": "75016579-dbb5-4825-8f1b-8041640aa09c"
+												},
+												{
+													"key": "phoneNo",
+													"value": "{{randomMobile}}",
+													"type": "text",
+													"uuid": "a1479bef-c20f-47e1-b045-874cfffaef36"
+												},
+												{
+													"key": "password",
+													"value": "Sam@123",
+													"type": "text",
+													"uuid": "6348caae-901e-450d-96aa-c9668ce96636"
+												},
+												{
+													"key": "confirmPassword",
+													"value": "Sam@123",
+													"type": "text",
+													"uuid": "c0c41b12-927e-4b20-8bb6-58977f6e3cd7"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{baseUrl}}/register",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"register"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "invalid register",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "81bd7649-af29-4db2-b561-2c9f974e811e",
+												"exec": [
+													"let json = pm.response.json();\r",
+													"\r",
+													"pm.test(\"Status code should indicate failure\", () => {\r",
+													"    pm.expect(pm.response.code).to.be.oneOf([400, 401, 403, 409, 422]);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Errors array must exist\", () => {\r",
+													"    pm.expect(json).to.have.property(\"errors\");\r",
+													"    pm.expect(json.errors).to.be.an(\"array\").that.is.not.empty;\r",
+													"});\r",
+													"\r",
+													"// -------- 3️⃣ Pattern-based message validation --------\r",
+													"pm.test(\"Error message should contain meaningful keywords\", () => {\r",
+													"\r",
+													"    const expectedKeywords = [\r",
+													"        // field-based\r",
+													"        \"email\", \"phone\", \"password\", \"name\",\r",
+													"        // rule / validation based\r",
+													"        \"invalid\", \"required\", \"missing\", \"must\",\r",
+													"        // length rules\r",
+													"        \"character\", \"minimum\", \"too small\", \"length\", \"contain\"\r",
+													"    ];\r",
+													"\r",
+													"    json.errors.forEach(err => {\r",
+													"        const message = err.message.toLowerCase();\r",
+													"\r",
+													"        const keywordFound = expectedKeywords.some(keyword =>\r",
+													"            message.includes(keyword)\r",
+													"        );\r",
+													"\r",
+													"        pm.expect(\r",
+													"            keywordFound,\r",
+													"            `Message '${message}' doesn't match expected validation pattern`\r",
+													"        ).to.be.true;\r",
+													"    });\r",
+													"});\r",
+													"\r",
+													"// -------- 3️⃣B Validate error object format --------\r",
+													"pm.test(\"Each error object should contain required structure fields\", () => {\r",
+													"\r",
+													"    json.errors.forEach((err, index) => {\r",
+													"\r",
+													"        // Must always have message\r",
+													"        pm.expect(err, `Error object at index ${index} missing message`)\r",
+													"            .to.have.property(\"message\");\r",
+													"\r",
+													"        // Expected metadata keys\r",
+													"        pm.expect(err, `Error object at index ${index} must contain validation structure`)\r",
+													"            .to.have.any.keys([\"validation\", \"code\", \"path\"]);\r",
+													"\r",
+													"        // Path must be array if exists\r",
+													"        if (err.path) {\r",
+													"            pm.expect(err.path).to.be.an(\"array\");\r",
+													"        }\r",
+													"    });\r",
+													"});\r",
+													"// -------- 4️⃣ Ensure no token or provider exists in invalid request --------\r",
+													"pm.test(\"Token must NOT exist\", () => {\r",
+													"    pm.expect(json).to.not.have.property(\"token\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Provider must NOT exist\", () => {\r",
+													"    pm.expect(json).to.not.have.property(\"provider\");\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {},
+												"requests": {}
+											}
+										}
+									],
+									"id": "47781331-49645e5b-8cfe-4662-a67f-29e864613541",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "email",
+													"value": "mayaaagmail.com",
+													"type": "text",
+													"uuid": "466c4ffb-f301-4d5f-9f73-72a87e44a274"
+												},
+												{
+													"key": "fullName",
+													"value": "maya",
+													"type": "text",
+													"uuid": "75016579-dbb5-4825-8f1b-8041640aa09c"
+												},
+												{
+													"key": "phoneNo",
+													"value": "999999999",
+													"type": "text",
+													"uuid": "a1479bef-c20f-47e1-b045-874cfffaef36"
+												},
+												{
+													"key": "password",
+													"value": "Mayaaa@123",
+													"type": "text",
+													"uuid": "6348caae-901e-450d-96aa-c9668ce96636"
+												},
+												{
+													"key": "confirmPassword",
+													"value": "Mayaaa@123",
+													"type": "text",
+													"uuid": "c0c41b12-927e-4b20-8bb6-58977f6e3cd7"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{baseUrl}}/register",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"register"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "signup store info",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "97d1cd9c-8967-4fc4-ae27-4c019fa92fef",
+												"exec": [
+													"const randomNum = Math.floor(Math.random() * 10000);\r",
+													"pm.environment.set(\"randomEmail\", `user${randomNum}@test.com`);\r",
+													"pm.environment.set(\"randomMobile\", `+9195${Math.floor(10000000 + Math.random() * 90000000)}`);\r",
+													"pm.environment.set(\"storeName\", \"My Test Store\");"
+												],
+												"type": "text/javascript",
+												"packages": {},
+												"requests": {}
+											}
+										}
+									],
+									"id": "47781331-28f46768-b81f-4e11-adfd-23a2f32f0141",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "storeName",
+													"value": "{{storeName}}",
+													"type": "text",
+													"uuid": "b94f51e1-cd53-476a-98b1-2152d545262c"
+												},
+												{
+													"key": "storePhone",
+													"value": "{{randomMobile}}",
+													"type": "text",
+													"uuid": "b6e852d4-0220-468e-bf79-266f004ff0f0"
+												},
+												{
+													"key": "storeEmail",
+													"value": "{{randomEmail}}",
+													"type": "text",
+													"uuid": "8b60a761-ee32-45b0-9b32-4d2025a308d1"
+												},
+												{
+													"key": "module",
+													"value": "6822e018e8235364b35df1ab",
+													"type": "text",
+													"uuid": "8e6d744c-e438-4386-9c42-0be8d19dac9b"
+												},
+												{
+													"key": "zone",
+													"value": "68d796b747b1d2670f05b6c5",
+													"type": "text",
+													"uuid": "ad5c72f0-e8e2-40ab-abf0-1c3f345bf9ce"
+												},
+												{
+													"key": "logo",
+													"type": "file",
+													"uuid": "e308dbbe-519d-4836-bef6-aea60c5c84fa",
+													"src": [
+														"/C:/Users/Win/Downloads/Onbording.jpg",
+														"/C:/Users/Win/Downloads/It Services.jpg"
+													]
+												},
+												{
+													"key": "cover",
+													"type": "file",
+													"uuid": "c6115bdf-f6aa-48ad-a890-4e2f68d9e870",
+													"src": [
+														"/C:/Users/Win/Downloads/Education Banner.jpg",
+														"/C:/Users/Win/Downloads/Finance Thumbnail.jpg"
+													]
+												},
+												{
+													"key": "tax",
+													"value": "",
+													"type": "text",
+													"uuid": "dc549b89-c62f-46cd-9478-d534eb1784b5",
+													"disabled": true
+												},
+												{
+													"key": "location",
+													"value": "{ \"type\": \"office\", \"coordinates\": [77.5946, 12.9716] }",
+													"type": "text",
+													"uuid": "2e50f1ea-b157-4c6a-8214-81c3b4e5dc03",
+													"disabled": true
+												},
+												{
+													"key": "address",
+													"value": "pune",
+													"type": "text",
+													"uuid": "00216b13-0703-4b1c-a571-5465a1b48a20"
+												},
+												{
+													"key": "officeNo",
+													"value": "307",
+													"type": "text",
+													"uuid": "e43f537a-6fd8-49f4-8fcb-ff9e1306017f"
+												},
+												{
+													"key": "city",
+													"value": "pune",
+													"type": "text",
+													"uuid": "8ecabf63-61fe-4997-8987-c6befc751dad"
+												},
+												{
+													"key": "state",
+													"value": "maharashtra",
+													"type": "text",
+													"uuid": "14b0981f-e0a4-4b7d-a722-f284c9b78ee4"
+												},
+												{
+													"key": "country",
+													"value": "india",
+													"type": "text",
+													"uuid": "bae0e6ad-3321-456c-a877-1dde95479c93"
+												},
+												{
+													"key": "id",
+													"value": "6928006ac14f473b373118b3",
+													"description": "prov id",
+													"type": "text",
+													"uuid": "6e257561-b7c7-4d2f-9021-3cb07d6a84bb"
+												}
+											]
+										},
+										"url": {
+											"raw": "https://api.fetchtrue.com/api/provider/store-info/",
+											"protocol": "https",
+											"host": [
+												"api",
+												"fetchtrue",
+												"com"
+											],
+											"path": [
+												"api",
+												"provider",
+												"store-info",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "specific prov details",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "d93081c0-19a7-4f26-bc0e-02bf19747d1d",
+												"exec": [
+													"// Get the response\r",
+													"let res = pm.response;\r",
+													"let json = {};\r",
+													"\r",
+													"// Parse JSON safely\r",
+													"try {\r",
+													"    json = res.json();\r",
+													"} catch (e) {\r",
+													"    console.log(\"Response is not JSON:\", e);\r",
+													"}\r",
+													"\r",
+													"// ✅ Check status code\r",
+													"pm.test(\"Status code is 200\", () => {\r",
+													"    pm.expect(res.code).to.equal(200);\r",
+													"});\r",
+													"\r",
+													"// ✅ Check response type\r",
+													"pm.test(\"Content-Type is JSON\", () => {\r",
+													"    pm.expect(res.headers.get(\"content-type\")).to.include(\"application/json\");\r",
+													"});\r",
+													"\r",
+													"// ✅ Check success\r",
+													"pm.test(\"Success is true\", () => {\r",
+													"    pm.expect(json.success).to.be.true;\r",
+													"});\r",
+													"\r",
+													"// ✅ Check data exists\r",
+													"pm.test(\"Data object exists\", () => {\r",
+													"    pm.expect(json.data).to.be.an(\"object\");\r",
+													"});\r",
+													"\r",
+													"// ✅ Check main provider fields\r",
+													"pm.test(\"Provider has required fields\", () => {\r",
+													"    pm.expect(json.data).to.have.property(\"_id\");\r",
+													"    pm.expect(json.data).to.have.property(\"fullName\");\r",
+													"    pm.expect(json.data).to.have.property(\"phoneNo\");\r",
+													"    pm.expect(json.data).to.have.property(\"email\");\r",
+													"});\r",
+													"\r",
+													"// ✅ Check store info\r",
+													"pm.test(\"Store info exists\", () => {\r",
+													"    pm.expect(json.data.storeInfo).to.be.an(\"object\");\r",
+													"    pm.expect(json.data.storeInfo).to.have.property(\"storeName\");\r",
+													"    pm.expect(json.data.storeInfo).to.have.property(\"city\");\r",
+													"    pm.expect(json.data.storeInfo).to.have.property(\"country\");\r",
+													"});\r",
+													"\r",
+													"// ✅ Check boolean flags\r",
+													"pm.test(\"Boolean flags are correct\", () => {\r",
+													"    pm.expect(json.data.isApproved).to.be.true;\r",
+													"    pm.expect(json.data.isVerified).to.be.a(\"boolean\");\r",
+													"    pm.expect(json.data.isStoreOpen).to.be.a(\"boolean\");\r",
+													"});\r",
+													"\r",
+													"// ✅ Check gallery images\r",
+													"pm.test(\"Gallery images exist\", () => {\r",
+													"    pm.expect(json.data.galleryImages).to.be.an(\"array\");\r",
+													"    pm.expect(json.data.galleryImages.length).to.be.above(0);\r",
+													"});\r",
+													"\r",
+													"// ✅ Check subscribed services\r",
+													"pm.test(\"Subscribed services exist\", () => {\r",
+													"    pm.expect(json.data.subscribedServices).to.be.an(\"array\");\r",
+													"    pm.expect(json.data.subscribedServices.length).to.be.above(0);\r",
+													"});\r",
+													"\r",
+													"// ✅ Check KYC documents\r",
+													"pm.test(\"KYC documents exist\", () => {\r",
+													"    pm.expect(json.data.kyc).to.be.an(\"object\");\r",
+													"    pm.expect(json.data.kyc.aadhaarCard).to.be.an(\"array\");\r",
+													"    pm.expect(json.data.kyc.panCard).to.be.an(\"array\");\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {},
+												"requests": {}
+											}
+										}
+									],
+									"id": "47781331-a3578d28-8034-4b13-be8e-0e68b32262e5",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://api.fetchtrue.com/api/provider/edit-profile/6916cf6c39e0c2935cb5fd4b",
+											"protocol": "https",
+											"host": [
+												"api",
+												"fetchtrue",
+												"com"
+											],
+											"path": [
+												"api",
+												"provider",
+												"edit-profile",
+												"6916cf6c39e0c2935cb5fd4b"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "All prov details",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "53a7e9d0-ce34-4753-9e79-d891441432b0",
+												"exec": [
+													"// Get response\r",
+													"let res = pm.response;\r",
+													"let json = {};\r",
+													"\r",
+													"// Parse JSON safely\r",
+													"try {\r",
+													"    json = res.json();\r",
+													"} catch (e) {\r",
+													"    console.log(\"Response is not JSON:\", e);\r",
+													"}\r",
+													"\r",
+													"// ✅ Check that the status code is 200\r",
+													"pm.test(\"Status code is 200\", () => {\r",
+													"    pm.expect(res.code).to.equal(200);\r",
+													"});\r",
+													"\r",
+													"// ✅ Check that the response content type is JSON\r",
+													"pm.test(\"Content-Type is JSON\", () => {\r",
+													"    pm.expect(res.headers.get(\"content-type\")).to.include(\"application/json\");\r",
+													"});\r",
+													"\r",
+													"// ✅ Make sure the response is an array\r",
+													"pm.test(\"Response data is an array\", () => {\r",
+													"    pm.expect(json).to.be.an(\"array\");\r",
+													"    pm.expect(json.length).to.be.above(0);\r",
+													"});\r",
+													"\r",
+													"// ✅ Loop through each provider in the array\r",
+													"json.forEach((provider, index) => {\r",
+													"\r",
+													"    // Basic provider info\r",
+													"    pm.test(`Provider ${index}: has basic fields`, () => {\r",
+													"        pm.expect(provider).to.have.property(\"_id\");\r",
+													"        pm.expect(provider).to.have.property(\"fullName\");\r",
+													"        pm.expect(provider).to.have.property(\"email\");\r",
+													"        pm.expect(provider).to.have.property(\"phoneNo\");\r",
+													"        pm.expect(provider).to.have.property(\"providerId\");\r",
+													"    });\r",
+													"\r",
+													"    // Gallery images\r",
+													"    pm.test(`Provider ${index}: galleryImages exist`, () => {\r",
+													"        pm.expect(provider.galleryImages).to.be.an(\"array\");\r",
+													"        pm.expect(provider.galleryImages.length).to.be.above(0);\r",
+													"    });\r",
+													"\r",
+													"    // Subscribed services\r",
+													"    pm.test(`Provider ${index}: subscribedServices exist`, () => {\r",
+													"        pm.expect(provider.subscribedServices).to.be.an(\"array\");\r",
+													"        // If you are a beginner, you can skip checking service details for now\r",
+													"    });\r",
+													"\r",
+													"    // Store info\r",
+													"    pm.test(`Provider ${index}: storeInfo exists`, () => {\r",
+													"        pm.expect(provider.storeInfo).to.have.property(\"storeName\");\r",
+													"        pm.expect(provider.storeInfo).to.have.property(\"storePhone\");\r",
+													"        pm.expect(provider.storeInfo).to.have.property(\"storeEmail\");\r",
+													"        pm.expect(provider.storeInfo).to.have.property(\"address\");\r",
+													"    });\r",
+													"\r",
+													"    // KYC info\r",
+													"    pm.test(`Provider ${index}: KYC exists`, () => {\r",
+													"        pm.expect(provider.kyc).to.have.property(\"aadhaarCard\");\r",
+													"        pm.expect(provider.kyc).to.have.property(\"panCard\");\r",
+													"        pm.expect(provider.kyc).to.have.property(\"storeDocument\");\r",
+													"        pm.expect(provider.kyc).to.have.property(\"GST\");\r",
+													"    });\r",
+													"\r",
+													"    // Status flags\r",
+													"    pm.test(`Provider ${index}: status flags are booleans`, () => {\r",
+													"        pm.expect(provider.isRejected).to.be.a(\"boolean\");\r",
+													"        pm.expect(provider.isApproved).to.be.a(\"boolean\");\r",
+													"        pm.expect(provider.isVerified).to.be.a(\"boolean\");\r",
+													"        pm.expect(provider.isDeleted).to.be.a(\"boolean\");\r",
+													"        pm.expect(provider.isStoreOpen).to.be.a(\"boolean\");\r",
+													"    });\r",
+													"\r",
+													"    // Created and updated dates\r",
+													"    pm.test(`Provider ${index}: dates are valid`, () => {\r",
+													"        pm.expect(new Date(provider.createdAt).toString()).not.to.eql(\"Invalid Date\");\r",
+													"        pm.expect(new Date(provider.updatedAt).toString()).not.to.eql(\"Invalid Date\");\r",
+													"    });\r",
+													"\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {},
+												"requests": {}
+											}
+										}
+									],
+									"id": "47781331-02ae6950-9033-4fd6-a402-86c02391a65b",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://api.fetchtrue.com/api/provider/",
+											"protocol": "https",
+											"host": [
+												"api",
+												"fetchtrue",
+												"com"
+											],
+											"path": [
+												"api",
+												"provider",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "prov profile update",
+									"id": "47781331-57fe086c-3fd4-45f2-91b3-17a3afebdc3f",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "fullName",
+													"value": "sameera",
+													"type": "text",
+													"uuid": "ba4bce18-a4e5-4b3e-80ee-4738236dfafe"
+												},
+												{
+													"key": "phoneNo",
+													"value": "8888888880",
+													"type": "text",
+													"uuid": "747daccd-822a-4b8d-900a-442e3e8e441b"
+												},
+												{
+													"key": "email",
+													"value": "sameera@gmail.com",
+													"type": "text",
+													"uuid": "c0948ddb-418d-4f1e-8d10-f1b75293eb4c"
+												},
+												{
+													"key": "storeInfo.storeName",
+													"value": "coursea",
+													"type": "text",
+													"uuid": "a9eb1603-a40a-4f22-bcdb-81540efed76e"
+												},
+												{
+													"key": "storeInfo.storePhone",
+													"value": "9090909099",
+													"type": "text",
+													"uuid": "2f9d4236-7348-4856-a98e-54535b1766fd"
+												},
+												{
+													"key": "storeInfo.storeEmail",
+													"value": "coursea@gmail.com",
+													"type": "text",
+													"uuid": "b7f2576a-a828-4548-b613-7698e078efe1"
+												},
+												{
+													"key": "storeInfo.city",
+													"value": "pune",
+													"type": "text",
+													"uuid": "4f812d17-ca51-4e93-8afa-74b2c95813f4"
+												},
+												{
+													"key": "storeInfo.state",
+													"value": "maharashtra",
+													"type": "text",
+													"uuid": "2d3394be-dbd3-45aa-906e-6d21d4979992"
+												},
+												{
+													"key": "storeInfo.country",
+													"value": "india",
+													"type": "text",
+													"uuid": "3a9324f7-51d7-495f-bea5-c78cad01a42f",
+													"disabled": true
+												},
+												{
+													"key": "logo",
+													"type": "file",
+													"uuid": "c4be5071-47bf-4d5b-aef7-c9049d0a7b01",
+													"src": "/C:/Users/Win/Downloads/view.htm"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{baseUrl}}/edit-profile/69258971c14f473b372d9587",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"edit-profile",
+												"69258971c14f473b372d9587"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"id": "47781331-472580d8-9b40-4b2f-a20a-dee918907935"
+						},
+						{
+							"name": "Login",
+							"item": [
+								{
+									"name": "valid login",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "0f8f0e7a-5049-4114-94ee-16c8307ba58d",
+												"exec": [
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													"pm.test(\"Content-Type is present\", function () {\r",
+													"    pm.response.to.have.header(\"Content-Type\");\r",
+													"});\r",
+													"pm.test(\"Your test name\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    pm.expect(jsonData.value).to.eql(100);\r",
+													"});\r",
+													"pm.test(\"Body matches string\", function () {\r",
+													"    pm.expect(pm.response.text()).to.include(\"Login successful\");\r",
+													"});\r",
+													"pm.test(\"Body is correct\", function () {\r",
+													"    pm.response.to.have.body(\"Login successful\");\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {},
+												"requests": {}
+											}
+										}
+									],
+									"id": "47781331-db12de8a-3e81-47e1-a6b4-36f205ac1758",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\":\"rim@gmail.com\",\r\n    \"password\":\"Rim@123\"\r\n}"
+										},
+										"url": {
+											"raw": "{{baseUrl}}/login",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"login"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "invalid login",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "0f8f0e7a-5049-4114-94ee-16c8307ba58d",
+												"exec": [
+													"let res = pm.response;\r",
+													"let json = {};\r",
+													"\r",
+													"try { \r",
+													"    json = res.json(); \r",
+													"} catch (e) {}\r",
+													"\r",
+													"// ---------------------------\r",
+													"// All possible validation errors\r",
+													"// ---------------------------\r",
+													"const validErrors = [\r",
+													"    \"invalid password\",\r",
+													"    \"email is required\",\r",
+													"    \"password is required\",\r",
+													"    \"user not found\",\r",
+													"    \"invalid email\",\r",
+													"    \"string must contain at least 10 character(s)\",\r",
+													"    \"phone number already registered\"\r",
+													"].map(e => e.toLowerCase()); // normalize to lowercase\r",
+													"\r",
+													"\r",
+													"\r",
+													"// ---------------------------\r",
+													"// 1. Status Code Check\r",
+													"// ---------------------------\r",
+													"pm.test(\"Invalid: Status code is 4xx\", () => {\r",
+													"    pm.expect(res.code).to.be.within(400, 499);\r",
+													"});\r",
+													"\r",
+													"// ---------------------------\r",
+													"// 2. Content-Type Check\r",
+													"// ---------------------------\r",
+													"pm.test(\"Content-Type is present\", () => {\r",
+													"    pm.response.to.have.header(\"Content-Type\");\r",
+													"});\r",
+													"\r",
+													"// ---------------------------\r",
+													"// 3. Body contains one valid error\r",
+													"// ---------------------------\r",
+													"pm.test(\"Body contains a valid error message\", () => {\r",
+													"    const body = res.text().toLowerCase();\r",
+													"    const matched = validErrors.some(err => body.includes(err));\r",
+													"    pm.expect(matched, \"Unexpected error message in body\").to.be.true;\r",
+													"});\r",
+													"\r",
+													"// ---------------------------\r",
+													"// 4. Validate json.errors array\r",
+													"// ---------------------------\r",
+													"pm.test(\"Errors array contains only valid error messages\", () => {\r",
+													"    if (json.errors && json.errors.length > 0) {\r",
+													"        json.errors.forEach(err => {\r",
+													"            const msg = err.message.toLowerCase();\r",
+													"            const matched = validErrors.some(valid => msg.includes(valid));\r",
+													"            pm.expect(matched, `Unexpected error message: ${msg}`).to.be.true;\r",
+													"        });\r",
+													"    }\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {},
+												"requests": {}
+											}
+										}
+									],
+									"id": "47781331-0474cf94-732d-48c3-a863-9322634e500c",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\":\"reem@gmail.com\",\r\n    \"password\":\"Reem@123\"\r\n}"
+										},
+										"url": {
+											"raw": "{{baseUrl}}/login",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"login"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"id": "47781331-2605531b-5f0c-4195-8a2f-6b9c7686fe22"
+						},
+						{
+							"name": "prov store aboutus",
+							"id": "47781331-58cf6e33-61de-40ba-bc1f-971477a42cd7",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"aboutUs\": \"We  test.\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/provider/about-us/6916cf6c39e0c2935cb5fd4b",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"provider",
+										"about-us",
+										"6916cf6c39e0c2935cb5fd4b"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"id": "47781331-cb980062-3455-4f1f-9398-bac8fb99e3de"
+				},
+				{
+					"name": "Subscribed services",
+					"item": [
+						{
+							"name": "subscribe serv",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "bdd7d38c-1d1e-47be-b7a6-97cdc6c7806b",
+										"exec": [
+											"let res=pm.response;\r",
+											"let json={};\r",
+											"try{\r",
+											"    json=res.json();\r",
+											"}catch(e){\r",
+											"    console.log(e);\r",
+											"}\r",
+											" pm.test(\"sts check\",()=>{\r",
+											"    pm.expect(res.code).to.equal(200);\r",
+											" });\r",
+											" \r",
+											" pm.test(\"Content-Type is JSON\", () => {\r",
+											"    pm.expect(res.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+											"});\r",
+											"\r",
+											" pm.test(\"Success status should be true\", () => {\r",
+											"    pm.expect(json.success).to.be.true;\r",
+											"    pm.expect(json.success).to.be.a(\"boolean\");\r",
+											"});\r",
+											"\r",
+											"  pm.test(\"Subscribed services array exists and is NOT empty\", () => {\r",
+											"    pm.expect(json).to.have.property(\"subscribedServices\");\r",
+											"    pm.expect(json.subscribedServices).to.be.an(\"array\").that.is.not.empty;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"id": "47781331-846988b8-886f-4ec8-b75e-61534766f6a1",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"providerId\": \"6928006ac14f473b373118b3\",\r\n    \"serviceId\": \"6879edae6f1a199552823f94\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/provider/subscribe",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"provider",
+										"subscribe"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "unsubscribe serv",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "af6c67c3-132a-4fca-a64c-10eb6b1ad1a7",
+										"exec": [
+											"let res=pm.response;\r",
+											"let json={};\r",
+											"try{\r",
+											"    json=res.json();\r",
+											"}catch(e)\r",
+											"{\r",
+											"    console.log(e);\r",
+											"}\r",
+											" pm.test(\"sts check\",()=>{\r",
+											"    pm.expect(res.code).to.equal(200);\r",
+											" });\r",
+											" pm.test(\"success\",()=>{\r",
+											"    pm.expect(json).to.have.property(\"success\");\r",
+											"    pm.expect(json.success).to.be.true;\r",
+											"    pm.expect(json.success).to.be.a(\"boolean\");\r",
+											"    pm.expect(json.success).to.equal(true);\r",
+											" });\r",
+											" \r",
+											" pm.test(\"message\",()=>{\r",
+											"    pm.expect(json).to.have.property(\"message\");\r",
+											"    pm.expect(json.message).to.be.a(\"string\");\r",
+											"    pm.expect(json.message.toLowerCase()).to.include(\" unsubscribed \");\r",
+											" });\r",
+											" pm.test(\"subscribe service array null\",()=>{\r",
+											"    pm.expect(json).to.have.property(\"subscribedServices\");\r",
+											"    pm.expect(json.subscribedServices).to.be.a(\"array\");\r",
+											"     pm.expect(json.subscribedServices).to.be.empty;\r",
+											" });\r",
+											" "
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"id": "47781331-4d7a94fb-fd79-4bec-a554-28401c43f311",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"providerId\": \"6928006ac14f473b373118b3\",\r\n    \"serviceId\": \"6879edae6f1a199552823f94\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/provider/unsubscribe",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"provider",
+										"unsubscribe"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "edit price subscribe by serv id",
+							"id": "47781331-efe42fb5-a3f8-4ec1-b0f1-e339d8a112ea",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"providerPrices\": [\r\n        {\r\n            \"provider\": \"64f8c0a9f3d2c12345678901\",\r\n            \"providerMRP\": 1200,\r\n            \"providerDiscount\": 200,\r\n            \"providerPrice\": 1000\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/service/provider-price/6870ebc000f9073f9528593b",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"service",
+										"provider-price",
+										"6870ebc000f9073f9528593b"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "subscribe serv details",
+							"id": "47781331-3698886d-a09c-413c-be8c-3e5d7a7f6ffc",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "subscribe serv details by serv id",
+							"id": "47781331-8f0900ec-e8f3-46b3-adfb-f37b2505d3cd",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/service/69259006d5dc7d5edd18fb22",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"service",
+										"69259006d5dc7d5edd18fb22"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"id": "47781331-b843e79e-837e-47ea-b700-d4b225167253"
+				},
+				{
+					"name": "serviceman",
+					"item": [
+						{
+							"name": "specific serviceman by prov id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "e8e5e852-bdf0-41c8-82de-02da2d2d3529",
+										"exec": [
+											"let res= pm.response;\r",
+											"let json={};\r",
+											"try\r",
+											"{\r",
+											"    json=res.json();\r",
+											"}\r",
+											"catch(e)\r",
+											"{\r",
+											"    console.log(e);\r",
+											"}\r",
+											"\r",
+											"pm.test(\"status check\", ()=>{\r",
+											"    pm.expect(res.code).to.equal(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Content-Type is present\", function () {\r",
+											"    pm.response.to.have.header(\"Content-Type\");\r",
+											"});\r",
+											"pm.test(\"Success is true\", () => {\r",
+											"    pm.expect(json.success).to.be.true;\r",
+											"});\r",
+											"\r",
+											"// 4. Data is an array\r",
+											"pm.test(\"Data is an array\", () => {\r",
+											"    pm.expect(json.data).to.be.an(\"array\");\r",
+											"    pm.expect(json).to.have.property(\"data\");\r",
+											"});\r",
+											"//array must be empty\r",
+											"pm.test(\"Array may be empty\", () => {\r",
+											"    pm.expect(json.data.length).to.be.at.least(0);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"id": "47781331-81923fec-301c-4c70-8292-0cbf8232f709",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/serviceman/filterByProvider/691c273ccd709f9f1873d932",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"serviceman",
+										"filterByProvider",
+										"691c273ccd709f9f1873d932"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "serviceman details",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "80a2362b-5578-45ee-8475-68e7b230c8ab",
+										"exec": [
+											"let json = pm.response.json();   // <-- THIS IS THE ONLY json YOU NEED\r",
+											"\r",
+											"pm.test(\"status check\", () => {\r",
+											"    pm.expect(pm.response.code).to.equal(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"header\", () => {\r",
+											"    pm.expect(pm.response.headers.get(\"content-type\")).to.include(\"application/json\");\r",
+											"});\r",
+											"\r",
+											"// 1. Response is an array\r",
+											"pm.test(\"Response is an array\", function () {\r",
+											"    pm.expect(json).to.be.an(\"array\");\r",
+											"});\r",
+											"\r",
+											"// 2. Array is not empty\r",
+											"pm.test(\"Array is not empty\", function () {\r",
+											"    pm.expect(json.length).to.be.above(0);\r",
+											"});\r",
+											"\r",
+											"// 3. Validate each item in array\r",
+											"json.forEach((item, index) => {\r",
+											"\r",
+											"    pm.test(`Item ${index}: Required fields present`, function () {\r",
+											"        pm.expect(item).to.have.property(\"_id\");\r",
+											"        pm.expect(item).to.have.property(\"name\");\r",
+											"        pm.expect(item).to.have.property(\"lastName\");\r",
+											"        pm.expect(item).to.have.property(\"phoneNo\");\r",
+											"        pm.expect(item).to.have.property(\"generalImage\");\r",
+											"        pm.expect(item).to.have.property(\"businessInformation\");\r",
+											"        pm.expect(item).to.have.property(\"email\");\r",
+											"        pm.expect(item).to.have.property(\"provider\");\r",
+											"        pm.expect(item).to.have.property(\"createdAt\");\r",
+											"        pm.expect(item).to.have.property(\"updatedAt\");\r",
+											"        pm.expect(item).to.have.property(\"serviceManId\");\r",
+											"    });\r",
+											"\r",
+											"    // 4. Validate businessInformation object\r",
+											"    pm.test(`Item ${index}: businessInformation object valid`, function () {\r",
+											"        pm.expect(item.businessInformation).to.be.an(\"object\");\r",
+											"        pm.expect(item.businessInformation).to.have.property(\"identityType\");\r",
+											"        pm.expect(item.businessInformation).to.have.property(\"identityNumber\");\r",
+											"        pm.expect(item.businessInformation).to.have.property(\"identityImage\");\r",
+											"    });\r",
+											"\r",
+											"    // 5. Field type tests\r",
+											"    pm.test(`Item ${index}: Field types`, function () {\r",
+											"        pm.expect(item.name).to.be.a(\"string\");\r",
+											"        pm.expect(item.lastName).to.be.a(\"string\");\r",
+											"        pm.expect(item.phoneNo).to.be.a(\"string\");\r",
+											"        pm.expect(item.email).to.be.a(\"string\");\r",
+											"        pm.expect(item.generalImage).to.be.a(\"string\");\r",
+											"        pm.expect(item.serviceManId).to.be.a(\"string\");\r",
+											"        pm.expect(item.createdAt).to.be.a(\"string\");\r",
+											"        pm.expect(item.updatedAt).to.be.a(\"string\");\r",
+											"    });\r",
+											"\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"id": "47781331-59f33911-5907-42e9-b565-6d758f6e1cd6",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.fetchtrue.com/api//serviceman/",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"",
+										"serviceman",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "specific serviceman details",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "80a2362b-5578-45ee-8475-68e7b230c8ab",
+										"exec": [
+											"let json = pm.response.json();\r",
+											"\r",
+											"// 1. Status code\r",
+											"pm.test(\"Status code is 200\", () => {\r",
+											"    pm.expect(pm.response.code).to.equal(200);\r",
+											"});\r",
+											"\r",
+											"// 2. success is true\r",
+											"pm.test(\"Success is true\", () => {\r",
+											"    pm.expect(json.success).to.be.true;\r",
+											"});\r",
+											"\r",
+											"// 3. data is an object\r",
+											"pm.test(\"data is an object\", () => {\r",
+											"    pm.expect(json.data).to.be.an(\"object\");\r",
+											"});\r",
+											"\r",
+											"// 4. Required fields inside data\r",
+											"pm.test(\"data contains required fields\", () => {\r",
+											"    pm.expect(json.data).to.have.property(\"_id\");\r",
+											"    pm.expect(json.data).to.have.property(\"name\");\r",
+											"    pm.expect(json.data).to.have.property(\"lastName\");\r",
+											"    pm.expect(json.data).to.have.property(\"phoneNo\");\r",
+											"    pm.expect(json.data).to.have.property(\"generalImage\");\r",
+											"    pm.expect(json.data).to.have.property(\"businessInformation\");\r",
+											"});\r",
+											"\r",
+											"// 5. businessInformation object validation\r",
+											"pm.test(\"businessInformation object is valid\", () => {\r",
+											"    pm.expect(json.data.businessInformation).to.be.an(\"object\");\r",
+											"    pm.expect(json.data.businessInformation).to.have.property(\"identityType\");\r",
+											"    pm.expect(json.data.businessInformation).to.have.property(\"identityNumber\");\r",
+											"    pm.expect(json.data.businessInformation).to.have.property(\"identityImage\");\r",
+											"});\r",
+											"\r",
+											"// 6. Type checks\r",
+											"pm.test(\"Field types are valid\", () => {\r",
+											"    pm.expect(json.data.name).to.be.a(\"string\");\r",
+											"    pm.expect(json.data.lastName).to.be.a(\"string\");\r",
+											"    pm.expect(json.data.phoneNo).to.be.a(\"string\");\r",
+											"    pm.expect(json.data.email).to.be.a(\"string\");\r",
+											"    pm.expect(json.data.generalImage).to.be.a(\"string\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"id": "47781331-5e204b4c-6dbb-44d9-88ee-1aef58d3f2c9",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.fetchtrue.com/api//serviceman/69255480c14f473b372d3359",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"",
+										"serviceman",
+										"69255480c14f473b372d3359"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Assign serviceman",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "bc549e27-b979-49fe-aab9-9cc4f6d1fd2e",
+										"exec": [
+											"let res=pm.response;\r",
+											"let json={};\r",
+											"try{\r",
+											"    json=res.json();\r",
+											"}\r",
+											"catch(e){\r",
+											"    console.log(e);\r",
+											"}\r",
+											"pm.test(\"sts check\", ()=>{\r",
+											"    pm.expect(res.code).to.equal(200);\r",
+											"});\r",
+											"pm.test(\"success msg\",()=>{\r",
+											"    pm.expect(json.success).to.equal(true);\r",
+											"});\r",
+											"pm.test(\"header\",()=>{\r",
+											"    pm.expect(res.headers.get(\"content-type\")).to.include(\"application/json\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"id": "47781331-a492a0e8-f49c-4588-9c80-67497ebe4ff5",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"serviceMan\":\"69255480c14f473b372d3359\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/checkout/691c436fcd709f9f1874b03f",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"checkout",
+										"691c436fcd709f9f1874b03f"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update serviceman",
+							"id": "47781331-e5df7cfb-5406-4a54-8973-f6cb07532911",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "jayesh",
+											"type": "text",
+											"uuid": "a06249a3-5cd6-4f48-baa2-69ebd1c4a11a"
+										},
+										{
+											"key": "lastName",
+											"value": "bfgbgb",
+											"type": "text",
+											"uuid": "8f4e4dc6-0f1e-4826-a468-79f5bd1d3527"
+										},
+										{
+											"key": "phoneNo",
+											"value": "4444444444",
+											"type": "text",
+											"uuid": "e8af75f9-670f-4b79-b60a-1883cb59c152"
+										},
+										{
+											"key": "email",
+											"value": "dgdg@gmail.com",
+											"type": "text",
+											"uuid": "fcbcaa74-cb55-4566-81ea-f2113af18f4c"
+										},
+										{
+											"key": "password",
+											"value": "345678",
+											"type": "text",
+											"uuid": "cdbdc88f-774d-4ce8-a6cc-6b0aefe67cea"
+										},
+										{
+											"key": "confirmPassword",
+											"value": "345678",
+											"type": "text",
+											"uuid": "fa215c47-c331-4392-bbdf-02154780047d"
+										},
+										{
+											"key": "identityType",
+											"value": "addharcard",
+											"type": "text",
+											"uuid": "9134009c-4389-4c15-b48a-bc9bd0dc3266"
+										},
+										{
+											"key": "identityNumber",
+											"value": "098765432167",
+											"type": "text",
+											"uuid": "71e05894-618b-4f5d-a221-f3c9c86985ab"
+										},
+										{
+											"key": "provider",
+											"value": "69258971c14f473b372d9587",
+											"type": "text",
+											"uuid": "428c44e2-b17a-49d6-84c8-6b8c8b950ccc"
+										},
+										{
+											"key": "generalImage",
+											"type": "file",
+											"uuid": "6a51aef9-25c4-45de-9e6c-d78bbb340482",
+											"src": "/C:/Users/Win/Downloads/Business webinar (4).jpg"
+										},
+										{
+											"key": "identityImage",
+											"type": "file",
+											"uuid": "a8898aa3-b56f-43dc-8342-ab4a78b919e1",
+											"src": "/C:/Users/Win/Downloads/Business webinar (4).jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/serviceman/6926a7bfc14f473b372f3e89",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"serviceman",
+										"6926a7bfc14f473b372f3e89"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add serviceman",
+							"id": "47781331-d8c326bb-b0a5-45fc-82af-0d379ffd96b1",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "jay",
+											"type": "text",
+											"uuid": "2a2e7770-f44b-408d-8bb1-8d7319d99deb"
+										},
+										{
+											"key": "lastName",
+											"value": "patil",
+											"type": "text",
+											"uuid": "4c8245ff-e0fd-491c-ae2f-57f138ad24ed"
+										},
+										{
+											"key": "phoneNo",
+											"value": "7777777777",
+											"type": "text",
+											"uuid": "67dcf573-3736-4309-b2c0-0b5572ca2698"
+										},
+										{
+											"key": "email",
+											"value": "jay@gmail.com",
+											"type": "text",
+											"uuid": "63096969-4179-444d-8424-a938a51a7e57"
+										},
+										{
+											"key": "password",
+											"value": "123456",
+											"type": "text",
+											"uuid": "490ecb33-c853-4aef-9bd9-292e04b0b113"
+										},
+										{
+											"key": "confirmPassword",
+											"value": "123456",
+											"type": "text",
+											"uuid": "f5d1b97b-cb5e-40ba-98da-1501c905a174"
+										},
+										{
+											"key": "identityType",
+											"value": "addharcard",
+											"type": "text",
+											"uuid": "0e8eff23-eea8-449f-a467-b5256d23e86c"
+										},
+										{
+											"key": "identityNumber",
+											"value": "593356789878",
+											"type": "text",
+											"uuid": "942ea4db-1ffa-44b3-9bf0-3fdaeb8ed516"
+										},
+										{
+											"key": "provider",
+											"value": "6928006ac14f473b373118b3",
+											"type": "text",
+											"uuid": "d2e274bd-abfb-4476-958d-38b4f1277c54"
+										},
+										{
+											"key": "generalImage",
+											"type": "file",
+											"uuid": "72c3e6d1-a2cd-487f-b39d-d76c0a08fc84",
+											"src": "/C:/Users/Win/Downloads/digital marketing webinar.jpg"
+										},
+										{
+											"key": "identityImage",
+											"type": "file",
+											"uuid": "a753ff00-ebea-4313-88ce-26db2f33246b",
+											"src": "/C:/Users/Win/Downloads/On Demand Services banner (1).jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/serviceman",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"serviceman"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"id": "47781331-12143be9-4760-49ab-9c87-f5ef43acaea6"
+				},
+				{
+					"name": "Checkout",
+					"item": [
+						{
+							"name": "specific booking",
+							"id": "47781331-c4f14327-e694-4b88-b9d9-fbb5890fcfad",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/checkout/",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"checkout",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create lead",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "fd9cad1f-1058-4a8d-8e3e-73d63a2d3888",
+										"exec": [
+											"let res=pm.response;\r",
+											"let json={};\r",
+											"try\r",
+											"{\r",
+											"  json=res.json();\r",
+											"}\r",
+											"catch(e)\r",
+											"{\r",
+											"    console.log(e);\r",
+											"}\r",
+											"\r",
+											"pm.test(\"status code\",()=>{\r",
+											"    pm.expect(res.code).to.be.oneOf([200,201]);\r",
+											"});\r",
+											"pm.test(\"success\",()=>{\r",
+											"    pm.expect(json).to.have.property(\"success\");\r",
+											"    pm.expect(json.success).to.be.a(\"boolean\");\r",
+											"    pm.expect(json.success).to.be.true;\r",
+											"});\r",
+											"pm.test(\"data object exists\",()=>{\r",
+											"    pm.expect(json).to.have.property(\"data\");\r",
+											"    pm.expect(json.data).to.not.be.empty;\r",
+											"});\r",
+											"pm.test(\"data is string\",()=>{\r",
+											"    pm.expect(json.data).to.have.property(\"user\").that.is.a(\"string\").to.not.be.empty;\r",
+											"    pm.expect(json.data).to.have.property(\"service\").that.is.a(\"string\").to.not.be.empty;\r",
+											"    pm.expect(json.data).to.have.property(\"serviceCustomer\").that.is.a(\"string\").to.not.be.empty;\r",
+											"    pm.expect(json.data).to.have.property(\"provider\").that.is.a(\"string\").to.not.be.empty;\r",
+											"    pm.expect(json.data).to.have.property(\"coupon\").that.is.a(\"string\").to.not.be.empty;\r",
+											"    pm.expect(json.data).to.have.property(\"paymentStatus\").that.is.a(\"string\").to.not.be.empty;\r",
+											"    pm.expect(json.data).to.have.property(\"orderStatus\").that.is.a(\"string\").to.not.be.empty;\r",
+											"    pm.expect(json.data).to.have.property(\"notes\").that.is.a(\"string\").to.not.be.empty;\r",
+											"    pm.expect(json.data).to.have.property(\"bookingId\").that.is.a(\"string\").to.not.be.empty;\r",
+											"    pm.expect(json.data).to.have.property(\"otp\").that.is.a(\"string\").to.not.be.empty;\r",
+											"    pm.expect(json.data).to.have.property(\"createdAt\").that.is.a(\"string\").to.not.be.empty;\r",
+											"    pm.expect(json.data).to.have.property(\"updatedAt\").that.is.a(\"string\").to.not.be.empty;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"data is num\",()=>{\r",
+											"    pm.expect(json.data).to.have.property(\"__v\").that.is.a(\"number\");\r",
+											"    pm.expect(json.data).to.have.property(\"cashInHandAmount\").that.is.a(\"number\");\r",
+											"    pm.expect(json.data).to.have.property(\"remainingAmount\").that.is.a(\"number\");\r",
+											"    pm.expect(json.data).to.have.property(\"paidAmount\").that.is.a(\"number\");\r",
+											"    pm.expect(json.data).to.have.property(\"otherAmount\").that.is.a(\"number\");\r",
+											"    pm.expect(json.data).to.have.property(\"walletAmount\").that.is.a(\"number\");\r",
+											"    pm.expect(json.data).to.have.property(\"grandTotal\").that.is.a(\"number\");\r",
+											"    pm.expect(json.data).to.have.property(\"totalAmount\").that.is.a(\"number\");\r",
+											"    \r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"id": "47781331-a663c7b3-1816-4037-bc91-aa3fdb8cc6dc",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"user\": \"6927fe32c14f473b373111df\",\r\n  \"service\": \"6879edae6f1a199552823f94\",\r\n  \"serviceCustomer\": \"69281f0e818a0992295ac106\",\r\n  \"provider\": \"6928006ac14f473b373118b3\",\r\n  \"coupon\": \"6905a6f2f52e261edc58ddd6\",\"subtotal\": 1000,\r\n  \"serviceDiscount\": 100,\r\n  \"couponDiscount\": 50,\r\n  \"champaignDiscount\": 25,\r\n  \"gst\": 18,\r\n  \"platformFee\": 20,\r\n  \"assurityfee\": 10,\r\n\r\n  \"listingPrice\": 1000.0,\r\n  \"serviceDiscountPrice\": 900.55,\r\n  \"priceAfterDiscount\": 850,\r\n  \"couponDiscountPrice\": 800,\r\n  \"serviceGSTPrice\": 144,\r\n  \"platformFeePrice\": 20,\r\n  \"assurityChargesPrice\": 10,\r\n\r\n  \"totalAmount\": 974,\r\n\r\n  \"termsCondition\": true,\r\n  \"paymentMethod\": \"wallet\",  // or \"cod\"\r\n  \"walletAmount\": 100,\r\n  \"otherAmount\": 200,\r\n  \"paidAmount\": 0,\r\n  \"remainingAmount\": 674,\r\n  \"isPartialPayment\": true,\r\n\r\n  \"paymentStatus\": \"pending\",  // or \"paid\"\r\n  \"orderStatus\": \"processing\",  // or \"confirmed\", \"cancelled\", etc.\r\n  \"notes\": \"Customer requested urgent service\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://biz-booster.vercel.app/api/checkout",
+									"protocol": "https",
+									"host": [
+										"biz-booster",
+										"vercel",
+										"app"
+									],
+									"path": [
+										"api",
+										"checkout"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "all bookings details",
+							"id": "47781331-593e26ab-b352-4bd9-a51b-6d7926448287",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/checkout/details/6921aa7cc14f473b372ab906",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"checkout",
+										"details",
+										"6921aa7cc14f473b372ab906"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Accept lead",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "628c488f-b089-4ba7-9df8-d258fc58e3ee",
+										"exec": [
+											"let res=pm.response;\r",
+											"let json={};\r",
+											"try{\r",
+											"    json=res.json();\r",
+											"}catch(e){\r",
+											"    console.log(e);\r",
+											"}\r",
+											" pm.test(\"sts check\",()=>{\r",
+											"    pm.expect(res.code).to.equal(200);\r",
+											" });\r",
+											" \r",
+											" pm.test(\"Content-Type is JSON\", () => {\r",
+											"    pm.expect(res.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+											"});\r",
+											"\r",
+											" pm.test(\"Success status should be true\", () => {\r",
+											"    pm.expect(json.success).to.be.true;\r",
+											"    pm.expect(json.success).to.be.a(\"boolean\");\r",
+											"});\r",
+											"\r",
+											"  pm.test(\"data\", () => {\r",
+											"    pm.expect(json).to.have.property(\"data\");\r",
+											"    pm.expect(json.data).to.be.an(\"object\").that.is.not.empty;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"String fields validation\", () => {\r",
+											"    const stringFields = [\r",
+											"        \"_id\", \"user\",\"service\",\"serviceCustomer\", \"provider\", \"coupon\", \"paymentStatus\", \"orderStatus\", \"notes\",\"acceptedDate\",\"createdAt\",\"updatedAt\",\"bookingId\",\"otp\"\r",
+											"    ];\r",
+											"\r",
+											"    stringFields.forEach(field => {\r",
+											"        pm.expect(json.data).to.have.property(field);\r",
+											"        pm.expect(json.data[field]).to.be.a(\"string\").and.not.empty;\r",
+											"    });\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"id": "47781331-8b9b963e-d763-453a-bb5b-9979d66d6bf3",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"isAccepted\": true,\r\n    \"acceptedDate\":\"2025-10-10T09:13:04.011Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/checkout/692820bf08d282dad1dea5f6",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"checkout",
+										"692820bf08d282dad1dea5f6"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update lead status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "d0c00152-b2e8-4f58-83a5-ac965262685b",
+										"exec": [
+											"let res = pm.response;\r",
+											"let json = {};\r",
+											"\r",
+											"try {\r",
+											"    json = res.json();\r",
+											"} catch (e) {\r",
+											"    console.log(\"Response is not JSON:\", e);\r",
+											"}\r",
+											"\r",
+											"// 1. Status code\r",
+											"pm.test(\"Status code is 200\", () => {\r",
+											"    pm.expect(res.code).to.be.oneOf([200,201]);\r",
+											"});\r",
+											"\r",
+											"// 2. Content-Type header\r",
+											"pm.test(\"Content-Type is JSON\", () => {\r",
+											"    pm.expect(res.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+											"});\r",
+											"\r",
+											"// 3. Success property\r",
+											"pm.test(\"Success is false\", () => {\r",
+											"    pm.expect(json.success).to.be.true;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"id": "47781331-e973f7d7-78c2-4da5-b859-f26f0c76084a",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "_id",
+											"value": "69258971c14f473b372d9587",
+											"type": "text",
+											"uuid": "8c1cfdf4-2a9f-4f6b-a967-6b69706e76d1"
+										},
+										{
+											"key": "amount",
+											"value": "5000",
+											"type": "text",
+											"uuid": "4b1ea5c5-c051-412f-9d60-546c9e0fbbec"
+										},
+										{
+											"key": "checkout",
+											"value": "69259337c14f473b372df1b1",
+											"type": "text",
+											"uuid": "68af8ce3-342d-4423-b407-b9252a93f351"
+										},
+										{
+											"key": "serviceMan",
+											"value": "692593f0c14f473b372df554",
+											"type": "text",
+											"uuid": "9e8fbd30-17cc-45d6-ac61-9e9d76b009ed"
+										},
+										{
+											"key": "document",
+											"value": "",
+											"type": "text",
+											"uuid": "7009dbc8-1110-4ed1-9755-190cf96cfca9"
+										},
+										{
+											"key": "leads",
+											"value": "[\n  {\n    \"statusType\": \"Lead accepted\",\n    \"description\": \"Payment verified 4865 Rs (Full) via Cashfree\",\n     \"zoomLink\": \"\",\n     \"paymentLink\": \"\",\n    \"paymentType\": \"full\"\n  }\n]",
+											"type": "text",
+											"uuid": "754f5eb4-e97f-4c73-a193-d3202fcc5908"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/leads",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"leads"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Lead commission",
+							"id": "47781331-225f05a1-dd7a-41b5-a28c-1f4523a1e8dd",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"checkoutId\": \"6731eae89b7a2a1d55c9c721\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/distributeLeadCommission",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"distributeLeadCommission"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "New Request",
+							"id": "47781331-91326431-350a-4e2d-9f14-127a9db619a0",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"user\": \"664bf1fdea0d1a913e3cfa83\",\r\n  \"service\": \"684a5ea000abcbee04ee9c38\",\r\n  \"serviceCustomer\": \"684d0af23e4d9ce0720cfc62\",\r\n  \"provider\": \"685d2eee2b8920a2a7d3da57\",\r\n  \"coupon\": \"6849768afe59cc59aea5351c\",\"subtotal\": 1000,\r\n  \"serviceDiscount\": 100,\r\n  \"couponDiscount\": 50,\r\n  \"champaignDiscount\": 25,\r\n  \"gst\": 18,\r\n  \"platformFee\": 20,\r\n  \"assurityfee\": 10,\r\n\r\n  \"listingPrice\": 1000.0,\r\n  \"serviceDiscountPrice\": 900.55,\r\n  \"priceAfterDiscount\": 850,\r\n  \"couponDiscountPrice\": 800,\r\n  \"serviceGSTPrice\": 144,\r\n  \"platformFeePrice\": 20,\r\n  \"assurityChargesPrice\": 10,\r\n\r\n  \"totalAmount\": 974,\r\n\r\n  \"termsCondition\": true,\r\n  \"paymentMethod\": \"wallet\",  // or \"cod\"\r\n  \"walletAmount\": 100,\r\n  \"otherAmount\": 200,\r\n  \"paidAmount\": 300,\r\n  \"remainingAmount\": 674,\r\n  \"isPartialPayment\": true,\r\n\r\n  \"paymentStatus\": \"pending\",  // or \"paid\"\r\n  \"orderStatus\": \"processing\",  // or \"confirmed\", \"cancelled\", etc.\r\n  \"notes\": \"Customer requested urgent service\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://biz-booster.vercel.app/api/checkout",
+									"protocol": "https",
+									"host": [
+										"biz-booster",
+										"vercel",
+										"app"
+									],
+									"path": [
+										"api",
+										"checkout"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"id": "47781331-94e758ad-5bf9-4cdf-af38-06e92cfe3882"
+				},
+				{
+					"name": "Leads",
+					"item": [
+						{
+							"name": "lead details",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "aad07719-08a8-4abd-b36a-6302698920a5",
+										"exec": [
+											"\r",
+											"let json = {};\r",
+											"\r",
+											"try {\r",
+											"    json = pm.response.json();\r",
+											"} catch (e) {\r",
+											"    console.log(\"Response is not JSON:\", e);\r",
+											"}\r",
+											"\r",
+											"// 1. Status code\r",
+											"pm.test(\"Status code is 200\", () => {\r",
+											"    pm.expect(pm.response.code).to.eql(200);\r",
+											"});\r",
+											"\r",
+											"// 2. Content-Type header\r",
+											"pm.test(\"Content-Type is JSON\", () => {\r",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+											"});\r",
+											"\r",
+											"// 3. Success property\r",
+											"pm.test(\"Success is true\", () => {\r",
+											"    pm.expect(json.success).to.be.true;\r",
+											"});\r",
+											"\r",
+											"// 4. Data is an array\r",
+											"pm.test(\"Data is an array\", () => {\r",
+											"    pm.expect(json.data).to.be.an(\"array\");\r",
+											"    pm.expect(json.data.length).to.be.above(0);\r",
+											"});\r",
+											"\r",
+											"// 5. Loop through each item in the data array\r",
+											"json.data.forEach((item, index) => {\r",
+											"\r",
+											"    // User object\r",
+											"    pm.test(`Item ${index}: User object has required fields`, () => {\r",
+											"        pm.expect(item.user).to.have.property(\"_id\");\r",
+											"        pm.expect(item.user).to.have.property(\"fullName\");\r",
+											"        pm.expect(item.user).to.have.property(\"email\");\r",
+											"        pm.expect(item.user).to.have.property(\"mobileNumber\");\r",
+											"    });\r",
+											"\r",
+											"    // Service object\r",
+											"    pm.test(`Item ${index}: Service object has required fields`, () => {\r",
+											"        pm.expect(item.service).to.have.property(\"_id\");\r",
+											"        pm.expect(item.service).to.have.property(\"serviceName\");\r",
+											"        pm.expect(item.service).to.have.property(\"price\");\r",
+											"        pm.expect(item.service).to.have.property(\"discountedPrice\");\r",
+											"        pm.expect(item.service.franchiseDetails).to.have.property(\"commission\");\r",
+											"    });\r",
+											"\r",
+											"    // Service customer object\r",
+											"    pm.test(`Item ${index}: Service customer has required fields`, () => {\r",
+											"        if (item.serviceCustomer) {\r",
+											"            pm.expect(item.serviceCustomer).to.have.property(\"_id\");\r",
+											"            pm.expect(item.serviceCustomer).to.have.property(\"fullName\");\r",
+											"            pm.expect(item.serviceCustomer).to.have.property(\"email\");\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    // Provider object\r",
+											"    pm.test(`Item ${index}: Provider object has required fields`, () => {\r",
+											"        if (item.provider) {\r",
+											"            pm.expect(item.provider).to.have.property(\"_id\");\r",
+											"            pm.expect(item.provider).to.have.property(\"fullName\");\r",
+											"            pm.expect(item.provider).to.have.property(\"email\");\r",
+											"        }\r",
+											"    });\r",
+											"\r",
+											"    // Payment and order info\r",
+											"    pm.test(`Item ${index}: Payment and order info is valid`, () => {\r",
+											"        pm.expect(item).to.have.property(\"paymentStatus\");\r",
+											"        pm.expect(item).to.have.property(\"orderStatus\");\r",
+											"        pm.expect(item).to.have.property(\"totalAmount\");\r",
+											"        pm.expect(item.paymentMethod).to.be.an(\"array\").that.includes(\"pac\");\r",
+											"    });\r",
+											"\r",
+											"    // Booking info\r",
+											"    pm.test(`Item ${index}: Booking info is valid`, () => {\r",
+											"        pm.expect(item).to.have.property(\"bookingId\");\r",
+											"        pm.expect(item).to.have.property(\"otp\");\r",
+											"        pm.expect(item).to.have.property(\"createdAt\");\r",
+											"        pm.expect(item).to.have.property(\"updatedAt\");\r",
+											"    });\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"id": "47781331-962beadf-6b5c-4536-98dd-e029da180f97",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.fetchtrue.com/api//checkout",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"",
+										"checkout"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "specific lead details by book id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2dc45ad8-2e19-410c-b27d-a326648e7e15",
+										"exec": [
+											"\r",
+											"let json = {};\r",
+											"\r",
+											"try {\r",
+											"    json = pm.response.json();\r",
+											"} catch (e) {\r",
+											"    console.log(\"Response is not JSON:\", e);\r",
+											"}\r",
+											"\r",
+											"// 1. Status code\r",
+											"pm.test(\"Status code is 200\", () => {\r",
+											"    pm.expect(pm.response.code).to.eql(200);\r",
+											"});\r",
+											"\r",
+											"// 2. Content-Type header\r",
+											"pm.test(\"Content-Type is JSON\", () => {\r",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+											"});\r",
+											"\r",
+											"// 3. Success property\r",
+											"pm.test(\"Success is true\", () => {\r",
+											"    pm.expect(json.success).to.be.true;\r",
+											"});\r",
+											"\r",
+											"// 4. Data object exists\r",
+											"pm.test(\"Data object exists\", () => {\r",
+											"    pm.expect(json.data).to.be.an(\"object\");\r",
+											"});\r",
+											"\r",
+											"// 5. User object inside data\r",
+											"pm.test(\"User object has required fields\", () => {\r",
+											"    pm.expect(json.data.user).to.have.property(\"_id\");\r",
+											"    pm.expect(json.data.user).to.have.property(\"fullName\");\r",
+											"    pm.expect(json.data.user).to.have.property(\"email\");\r",
+											"    pm.expect(json.data.user).to.have.property(\"mobileNumber\");\r",
+											"});\r",
+											"\r",
+											"// 6. Service object inside data\r",
+											"pm.test(\"Service object has required fields\", () => {\r",
+											"    pm.expect(json.data.service).to.have.property(\"_id\");\r",
+											"    pm.expect(json.data.service).to.have.property(\"serviceName\");\r",
+											"    pm.expect(json.data.service).to.have.property(\"price\");\r",
+											"    pm.expect(json.data.service).to.have.property(\"discountedPrice\");\r",
+											"    pm.expect(json.data.service.franchiseDetails).to.have.property(\"commission\");\r",
+											"});\r",
+											"\r",
+											"// 7. Payment info\r",
+											"pm.test(\"Payment and order info is valid\", () => {\r",
+											"    pm.expect(json.data).to.have.property(\"paymentStatus\");\r",
+											"    pm.expect(json.data).to.have.property(\"orderStatus\");\r",
+											"    pm.expect(json.data).to.have.property(\"totalAmount\");\r",
+											"    pm.expect(json.data.paymentMethod).to.include(\"pac\");\r",
+											"});\r",
+											"\r",
+											"// 8. Booking info\r",
+											"pm.test(\"Booking info is valid\", () => {\r",
+											"    pm.expect(json.data).to.have.property(\"bookingId\");\r",
+											"    pm.expect(json.data).to.have.property(\"otp\");\r",
+											"    pm.expect(json.data).to.have.property(\"createdAt\");\r",
+											"    pm.expect(json.data).to.have.property(\"updatedAt\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"id": "47781331-fd3c9bd8-19bc-4ae1-9b48-261c7fcaecd8",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/checkout/details/6921aa7cc14f473b372ab906",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"checkout",
+										"details",
+										"6921aa7cc14f473b372ab906"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Lead status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "b59e6416-9a0d-4a26-879e-71258085909e",
+										"exec": [
+											"\r",
+											"let json = {};\r",
+											"\r",
+											"try {\r",
+											"    json = pm.response.json();\r",
+											"} catch (e) {\r",
+											"    console.log(\"Response is not JSON:\", e);\r",
+											"}\r",
+											"\r",
+											"// 1. Status code\r",
+											"pm.test(\"Status code is 200\", () => {\r",
+											"    pm.expect(pm.response.code).to.eql(200);\r",
+											"});\r",
+											"\r",
+											"// 2. Content-Type header\r",
+											"pm.test(\"Content-Type is JSON\", () => {\r",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+											"});\r",
+											"\r",
+											"// 3. Success property\r",
+											"pm.test(\"Success is true\", () => {\r",
+											"    pm.expect(json.success).to.be.true;\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"id": "47781331-49a2b50a-2d3d-4ef4-b0d1-b081a57ec193",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.fetchtrue.com/api/leads/FindByCheckout/6921aa7cc14f473b372ab906",
+									"protocol": "https",
+									"host": [
+										"api",
+										"fetchtrue",
+										"com"
+									],
+									"path": [
+										"api",
+										"leads",
+										"FindByCheckout",
+										"6921aa7cc14f473b372ab906"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"id": "47781331-ec73652d-e662-47d5-95ef-0adff364e0d5"
+				}
+			],
+			"id": "47781331-c5472060-4ab3-4ee8-a128-f5545a2ec5ee"
+		},
+		{
+			"name": "Bank",
+			"item": [
+				{
+					"name": "add bank",
+					"id": "47781331-eb77295a-e177-46c7-97bb-d614c36def09",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"userId\": \"6901a2fbfe2828814fe027d4\",\r\n  \"accountNumber\": \"123456789012\",\r\n  \"ifsc\": \"HDFC0001234\",\r\n  \"bankName\": \"HDFC Bank\",\r\n  \"branchName\": \"Pune Main Branch\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/wallet/add-beneficiary",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"wallet",
+								"add-beneficiary"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "bank details",
+					"id": "47781331-751024f0-b9b8-4bdf-b2ca-9539c86ea744",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/users/bank-details/68cd3e3c366c9b296274d4ca",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"users",
+								"bank-details",
+								"68cd3e3c366c9b296274d4ca"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "47781331-3dc98413-6f4f-4a84-8c8b-fd146e55aa40"
+		},
+		{
+			"name": "Reference",
+			"item": [
+				{
+					"name": "New Request",
+					"id": "47781331-1448d6eb-0ad9-4b82-8dc2-84f0cdca67c9",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/users/referredby",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"users",
+								"referredby"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "47781331-bf25f041-7857-418d-8cd3-b8e1f01e8cdd"
+		},
+		{
+			"name": "Team build",
+			"item": [
+				{
+					"name": "my team",
+					"id": "47781331-de6342ca-61c7-432d-b668-1f8f733963e8",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/team-build/my-team/69117ac40808e0426c154c0f",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"team-build",
+								"my-team",
+								"69117ac40808e0426c154c0f"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "47781331-5cdb36cd-1543-4cc5-945c-7e6569f1f026"
+		},
+		{
+			"name": "Remaining",
+			"item": [
+				{
+					"name": "modules details",
+					"id": "47781331-319b0efe-400c-4b20-8ec9-a7d8a57f165e",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://biz-booster.vercel.app/api/modules",
+							"protocol": "https",
+							"host": [
+								"biz-booster",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"modules"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "category details",
+					"id": "47781331-3093517a-354d-4edd-84bf-7baaca43727b",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://biz-booster.vercel.app/api/modules",
+							"protocol": "https",
+							"host": [
+								"biz-booster",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"modules"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "zone details",
+					"id": "47781331-3565000c-2da9-4dc5-a5d4-79da2cfad106",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://biz-booster.vercel.app/api/zone",
+							"protocol": "https",
+							"host": [
+								"biz-booster",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"zone"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "prov wallet",
+					"id": "47781331-de1b2003-d503-47d3-81a6-7710961cb6b2",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/provider/wallet/69258971c14f473b372d9587",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"provider",
+								"wallet",
+								"69258971c14f473b372d9587"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Review details",
+					"id": "47781331-6663fd1b-07cf-4a00-87c9-ecfbe9195c64",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/leads/FindByCheckout/69259337c14f473b372df1b1",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"leads",
+								"FindByCheckout",
+								"69259337c14f473b372df1b1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "download invoice",
+					"id": "47781331-5666978f-3ae5-47b1-9ff7-5673826797a0",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/invoice/690352b53a4976d35e869427",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"invoice",
+								"690352b53a4976d35e869427"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "service details",
+					"id": "47781331-64e2b1f8-00c6-4509-a5f2-9aa56725f9fc",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/service",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"service"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cash in hand",
+					"id": "47781331-bccd6480-b9b6-4082-886b-e07382bfb556",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/checkout/cash-in-hand/69146d57d95d55ec7ac56a5f",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"checkout",
+								"cash-in-hand",
+								"69146d57d95d55ec7ac56a5f"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "47781331-fd8d22dc-08c4-4935-ad48-49d6eb143aef"
+		},
+		{
+			"name": "Add on services",
+			"item": [
+				{
+					"name": "add new serv",
+					"id": "47781331-4bfb9fe2-2093-46ce-aaea-14a137cd3e12",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"extraService\": [\r\n        {\r\n            \"serviceName\": \"New\",\r\n            \"price\": \"100\",\r\n            \"discount\": \"20\",\r\n            \"total\": \"80\",\r\n            \"commission\": \"0\",\r\n            \"isLeadApproved\": false\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/leads/FindByCheckout/690c6c980808e0426c08b3b2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"leads",
+								"FindByCheckout",
+								"690c6c980808e0426c08b3b2"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "47781331-2bb8ed86-a37c-4be5-b7b6-567bae73ded6"
+		},
+		{
+			"name": "Advertisement",
+			"item": [
+				{
+					"name": "All details Adv",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8223a558-70e4-44f1-a3d7-ee8a419fe0d7",
+								"exec": [
+									"let res=pm.response;\r",
+									"let json={};\r",
+									"try{\r",
+									"    json=res.json();\r",
+									"}\r",
+									"catch(e)\r",
+									"{\r",
+									"    console.log(e);\r",
+									"}\r",
+									"pm.test(\"status check\",()=>{\r",
+									"    pm.expect(res.code).to.equal(200);\r",
+									"});\r",
+									"pm.test(\"content headers\",()=>{\r",
+									"    pm.expect(res.headers.get(\"content-type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"pm.test(\"success check\",()=>{\r",
+									"    pm.expect(json.success).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"array present\",()=>{\r",
+									"    pm.expect(json.data).to.be.an(\"array\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"json.data.forEach((item, index) => {\r",
+									"\r",
+									"    pm.test(`Item ${index}: required fields exist`, function () {\r",
+									"        pm.expect(item).to.have.property(\"_id\");\r",
+									"        pm.expect(item).to.have.property(\"addType\");\r",
+									"        pm.expect(item).to.have.property(\"category\");\r",
+									"        pm.expect(item).to.have.property(\"service\");\r",
+									"        pm.expect(item).to.have.property(\"title\");\r",
+									"        pm.expect(item).to.have.property(\"description\");\r",
+									"        pm.expect(item).to.have.property(\"fileUrl\");\r",
+									"        pm.expect(item).to.have.property(\"startDate\");\r",
+									"        pm.expect(item).to.have.property(\"endDate\");\r",
+									"        pm.expect(item).to.have.property(\"createdAt\");\r",
+									"        pm.expect(item).to.have.property(\"updatedAt\");\r",
+									"    });\r",
+									"\r",
+									"    /* ---------------------------\r",
+									"       CATEGORY OBJECT TEST\r",
+									"    --------------------------- */\r",
+									"\r",
+									"    pm.test(`Item ${index}: Category object valid`, function () {\r",
+									"        pm.expect(item.category).to.be.an(\"object\");\r",
+									"        pm.expect(item.category).to.have.property(\"_id\");\r",
+									"        pm.expect(item.category).to.have.property(\"name\");\r",
+									"        pm.expect(item.category).to.have.property(\"image\");\r",
+									"        pm.expect(item.category).to.have.property(\"module\");\r",
+									"    });\r",
+									"\r",
+									"    /* ---------------------------\r",
+									"       SERVICE OBJECT TEST\r",
+									"    --------------------------- */\r",
+									"\r",
+									"    pm.test(`Item ${index}: Service object valid`, function () {\r",
+									"        pm.expect(item.service).to.be.an(\"object\");\r",
+									"        pm.expect(item.service).to.have.property(\"serviceDetails\");\r",
+									"        pm.expect(item.service).to.have.property(\"franchiseDetails\");\r",
+									"    });\r",
+									"\r",
+									"    /* ---------------------------\r",
+									"       SERVICE DETAILS TEST\r",
+									"    --------------------------- */\r",
+									"\r",
+									"    pm.test(`Item ${index}: serviceDetails valid`, function () {\r",
+									"        let sd = item.service.serviceDetails;\r",
+									"        pm.expect(sd).to.have.property(\"overview\");\r",
+									"        pm.expect(sd).to.have.property(\"benefits\");\r",
+									"        pm.expect(sd).to.have.property(\"howItWorks\");\r",
+									"        pm.expect(sd).to.have.property(\"termsAndConditions\");\r",
+									"        pm.expect(sd).to.have.property(\"document\");\r",
+									"        pm.expect(sd).to.have.property(\"whyChoose\");\r",
+									"        pm.expect(sd).to.have.property(\"faq\");\r",
+									"    });\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"id": "47781331-f2474d93-5cf1-4acc-95b3-3c8a31ce1114",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/ads",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"ads"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "specific add",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "efee0518-6f84-498e-97fb-57449ff4ea83",
+								"exec": [
+									"let res=pm.response;\r",
+									"let json={};\r",
+									"try{\r",
+									"    json=res.json();\r",
+									"}catch(e){\r",
+									"    console.log(e);\r",
+									"}\r",
+									"pm.test(\"sts code\",()=>{\r",
+									"    pm.expect(res.code).to.equal(200);\r",
+									"});\r",
+									"pm.test(\"status msg\",()=>{\r",
+									"    pm.expect(json.success).to.be.true;\r",
+									"});\r",
+									"pm.test(\"header\",()=>{\r",
+									"    pm.expect(res.headers.get(\"content-type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"pm.test(\"data present\",()=>{\r",
+									"    pm.expect(json.data).to.be.an(\"object\");\r",
+									"});\r",
+									"pm.test(\"Top-level data fields present\", () => {\r",
+									"    const d = json.data;\r",
+									"    pm.expect(d).to.have.property(\"_id\");\r",
+									"    pm.expect(d).to.have.property(\"addType\");\r",
+									"    pm.expect(d).to.have.property(\"category\");\r",
+									"    pm.expect(d).to.have.property(\"service\");\r",
+									"});\r",
+									"\r",
+									"//\r",
+									"// 6. Category object validation\r",
+									"//\r",
+									"pm.test(\"Category object is valid\", () => {\r",
+									"    const category = json.data.category;\r",
+									"\r",
+									"    pm.expect(category).to.be.an(\"object\");\r",
+									"    pm.expect(category).to.have.property(\"_id\");\r",
+									"    pm.expect(category).to.have.property(\"name\");\r",
+									"    pm.expect(category).to.have.property(\"module\");\r",
+									"    pm.expect(category).to.have.property(\"image\");\r",
+									"    pm.expect(category).to.have.property(\"isDeleted\");\r",
+									"    pm.expect(category).to.have.property(\"sortOrder\");\r",
+									"});\r",
+									"\r",
+									"//\r",
+									"// 7. Data types inside category\r",
+									"//\r",
+									"pm.test(\"Category field types correct\", () => {\r",
+									"    const cat = json.data.category;\r",
+									"\r",
+									"    pm.expect(cat._id).to.be.a(\"string\");\r",
+									"    pm.expect(cat.name).to.be.a(\"string\");\r",
+									"    pm.expect(cat.module).to.be.a(\"string\");\r",
+									"    pm.expect(cat.image).to.be.a(\"string\");\r",
+									"    pm.expect(cat.isDeleted).to.be.a(\"boolean\");\r",
+									"    pm.expect(cat.sortOrder).to.be.a(\"number\");\r",
+									"});\r",
+									"\r",
+									"//\r",
+									"// 8. Service object validation\r",
+									"//\r",
+									"pm.test(\"Service object exists\", () => {\r",
+									"    const service = json.data.service;\r",
+									"    pm.expect(service).to.be.an(\"object\");\r",
+									"    pm.expect(service).to.have.property(\"_id\");\r",
+									"    pm.expect(service).to.have.property(\"serviceName\");\r",
+									"    pm.expect(service).to.have.property(\"price\");\r",
+									"    pm.expect(service).to.have.property(\"discount\");\r",
+									"    pm.expect(service).to.have.property(\"discountedPrice\");\r",
+									"});\r",
+									"\r",
+									"//\r",
+									"// 9. Important service type checks\r",
+									"//\r",
+									"pm.test(\"Service fields have correct data types\", () => {\r",
+									"    const s = json.data.service;\r",
+									"    pm.expect(s.serviceName).to.be.a(\"string\");\r",
+									"    pm.expect(s.price).to.be.a(\"number\");\r",
+									"    pm.expect(s.discount).to.be.a(\"number\");\r",
+									"    pm.expect(s.discountedPrice).to.be.a(\"number\");\r",
+									"});\r",
+									"\r",
+									"//\r",
+									"// 10. Start & End Dates\r",
+									"//\r",
+									"pm.test(\"Start and End Dates exist\", () => {\r",
+									"    const d = json.data;\r",
+									"    pm.expect(d.startDate).to.be.a(\"string\");\r",
+									"    pm.expect(d.endDate).to.be.a(\"string\");\r",
+									"});\r",
+									"\r",
+									"//\r",
+									"// 11. Boolean flags\r",
+									"//\r",
+									"pm.test(\"Boolean flags are valid\", () => {\r",
+									"    const d = json.data;\r",
+									"    pm.expect(d.isExpired).to.be.a(\"boolean\");\r",
+									"    pm.expect(d.isApproved).to.be.a(\"boolean\");\r",
+									"    pm.expect(d.isDeleted).to.be.a(\"boolean\");\r",
+									"});\r",
+									"\r",
+									"//\r",
+									"// 12. File URL check\r",
+									"//\r",
+									"pm.test(\"File URL is valid string\", () => {\r",
+									"    pm.expect(json.data.fileUrl).to.be.a(\"string\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"id": "47781331-d578ebc0-d7a7-4e0c-abae-c107a2079c82",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/ads/690c49313b4877bcde428389",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"ads",
+								"690c49313b4877bcde428389"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get add as prov id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e2bb88ab-b998-49c9-a64b-bbee0442af59",
+								"exec": [
+									"let res=pm.response;\r",
+									"let json={};\r",
+									"try{\r",
+									"    json=res.json();\r",
+									"}\r",
+									"catch(e)\r",
+									"{\r",
+									"    console.log(e);\r",
+									"}\r",
+									"pm.test(\"status check\",()=>{\r",
+									"    pm.expect(res.code).to.equal(200);\r",
+									"});\r",
+									"pm.test(\"content headers\",()=>{\r",
+									"    pm.expect(res.headers.get(\"content-type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"pm.test(\"success check\",()=>{\r",
+									"    pm.expect(json.success).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"array present\",()=>{\r",
+									"    pm.expect(json.data).to.be.an(\"array\");\r",
+									"});\r",
+									"\r",
+									"json.data.forEach((item, index) => {\r",
+									"\r",
+									"    pm.test(`Item ${index}: required fields exist`, function () {\r",
+									"        pm.expect(item).to.have.property(\"_id\");\r",
+									"        pm.expect(item).to.have.property(\"addType\");\r",
+									"        pm.expect(item).to.have.property(\"category\");\r",
+									"        pm.expect(item).to.have.property(\"service\");\r",
+									"        pm.expect(item).to.have.property(\"title\");\r",
+									"        pm.expect(item).to.have.property(\"description\");\r",
+									"        pm.expect(item).to.have.property(\"fileUrl\");\r",
+									"        pm.expect(item).to.have.property(\"startDate\");\r",
+									"        pm.expect(item).to.have.property(\"endDate\");\r",
+									"        pm.expect(item).to.have.property(\"createdAt\");\r",
+									"        pm.expect(item).to.have.property(\"updatedAt\");\r",
+									"    });\r",
+									"\r",
+									"    /* ---------------------------\r",
+									"       CATEGORY OBJECT TEST\r",
+									"    --------------------------- */\r",
+									"\r",
+									"    pm.test(`Item ${index}: Category object valid`, function () {\r",
+									"        pm.expect(item.category).to.be.an(\"object\");\r",
+									"        pm.expect(item.category).to.have.property(\"_id\");\r",
+									"        pm.expect(item.category).to.have.property(\"name\");\r",
+									"        pm.expect(item.category).to.have.property(\"image\");\r",
+									"        pm.expect(item.category).to.have.property(\"module\");\r",
+									"    });\r",
+									"\r",
+									"    /* ---------------------------\r",
+									"       SERVICE OBJECT TEST\r",
+									"    --------------------------- */\r",
+									"\r",
+									"    pm.test(`Item ${index}: Service object valid`, function () {\r",
+									"        pm.expect(item.service).to.be.an(\"object\");\r",
+									"        pm.expect(item.service).to.have.property(\"serviceDetails\");\r",
+									"        pm.expect(item.service).to.have.property(\"franchiseDetails\");\r",
+									"    });\r",
+									"\r",
+									"    /* ---------------------------\r",
+									"       SERVICE DETAILS TEST\r",
+									"    --------------------------- */\r",
+									"\r",
+									"    pm.test(`Item ${index}: serviceDetails valid`, function () {\r",
+									"        let sd = item.service.serviceDetails;\r",
+									"        pm.expect(sd).to.have.property(\"overview\");\r",
+									"        pm.expect(sd).to.have.property(\"benefits\");\r",
+									"        pm.expect(sd).to.have.property(\"howItWorks\");\r",
+									"        pm.expect(sd).to.have.property(\"termsAndConditions\");\r",
+									"        pm.expect(sd).to.have.property(\"document\");\r",
+									"        pm.expect(sd).to.have.property(\"whyChoose\");\r",
+									"        pm.expect(sd).to.have.property(\"faq\");\r",
+									"    });\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"id": "47781331-eb46e447-ed87-444a-93db-dacd5c741cc0",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/ads/provider-wise/68cd31ce366c9b296273cf33",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"ads",
+								"provider-wise",
+								"68cd31ce366c9b296273cf33"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete Adv",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1059013e-d906-4eee-977e-ed08520bb82f",
+								"exec": [
+									"let res=pm.response;\r",
+									"let json={};\r",
+									"try{\r",
+									"    json=res.json();\r",
+									"}\r",
+									"catch(e)\r",
+									"{\r",
+									"    console.log(e);\r",
+									"}\r",
+									"pm.test(\"status check\",()=>{\r",
+									"    pm.expect(res.code).to.equal(200);\r",
+									"});\r",
+									"pm.test(\"content headers\",()=>{\r",
+									"    pm.expect(res.headers.get(\"content-type\")).to.include(\"application/json\");\r",
+									"});\r",
+									"pm.test(\"success check\",()=>{\r",
+									"    pm.expect(json.success).to.be.true;\r",
+									"});\r",
+									"pm.test(\"data is not null\", () => {\r",
+									"    pm.expect(json.data).to.not.be.null;\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"id": "47781331-fe113ee6-e5ed-4756-ba1f-8c6106dc2f89",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/ads/690832e4cf43abab647119f7",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"ads",
+								"690832e4cf43abab647119f7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create Adv",
+					"id": "47781331-284ec0c9-bfe5-497b-81b6-382cfb5e29d1",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/ads?addType&category&subscribedServices&startDate&endDate&title&description&Image",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"ads"
+							],
+							"query": [
+								{
+									"key": "addType",
+									"value": null
+								},
+								{
+									"key": "category",
+									"value": null
+								},
+								{
+									"key": "subscribedServices",
+									"value": null
+								},
+								{
+									"key": "startDate",
+									"value": null
+								},
+								{
+									"key": "endDate",
+									"value": null
+								},
+								{
+									"key": "title",
+									"value": null
+								},
+								{
+									"key": "description",
+									"value": null
+								},
+								{
+									"key": "Image",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "47781331-9f7fc9da-3ed2-4424-96bc-6f3be9c6f3fb"
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "valid register",
+					"id": "47781331-1362f6f7-4dc8-44e9-9cda-03a1164a72f4",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"fullName\": \"chandu chandu\",\r\n  \"email\": \"chandu1@test.com\",\r\n  \"mobileNumber\": \"+919988776655\",\r\n  \"password\": \"Abc@123\",\r\n  \"confirmPassword\": \"Abc@123\",\r\n  \"isAgree\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"id": "47781331-45bab896-a951-48a9-886c-f6f68a7c8be9",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"emma.watson@example.com\",\r\n  \"password\": \"Emma@2025Pass\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://biz-booster.vercel.app/api/auth/login",
+							"protocol": "https",
+							"host": [
+								"biz-booster",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "47781331-3e6a2045-84c3-44d1-b663-d87ba07d0d0a"
+		},
+		{
+			"name": "Banner",
+			"item": [
+				{
+					"name": "banner details",
+					"id": "47781331-1420594f-0de8-40ab-b222-72ca820621e2",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/banner",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"banner"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "47781331-2c276d6c-7dde-4314-8976-4566cc7ad210"
+		},
+		{
+			"name": "Academy",
+			"item": [],
+			"id": "47781331-1ecdae94-b182-49c2-a02e-de08e6cd1a5e"
+		},
+		{
+			"name": "Prov bank",
+			"item": [
+				{
+					"name": "add bank",
+					"id": "47781331-b8818ea2-8ef6-4a9b-9176-a6014967cde7",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"providerId\": \"68cd2f68366c9b296273a23c\",\r\n  \"accountNumber\": \"123456789012\",\r\n  \"ifsc\": \"HDFC0001234\",\r\n  \"bankName\": \"HDFC Bank\",\r\n  \"branchName\": \"Andheri East Branch\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/provider/payout/add-beneficiary",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"provider",
+								"payout",
+								"add-beneficiary"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "bank details",
+					"id": "47781331-76935957-ffb7-4b45-918c-1e0254d398dc",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/provider/bank-details/68cd2f68366c9b296273a23c",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"provider",
+								"bank-details",
+								"68cd2f68366c9b296273a23c"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "47781331-cb8779cc-918c-4b5e-a681-03a1e2956014"
+		}
+	]
+}
