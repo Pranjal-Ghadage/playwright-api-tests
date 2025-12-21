@@ -3817,8 +3817,61 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "addType",
+									"value": "image",
+									"type": "text",
+									"uuid": "0c9b31a7-7ffe-42dd-8604-64adb7b3b1bc"
+								},
+								{
+									"key": "category",
+									"value": "685267b06c08bf6e73a74598",
+									"type": "text",
+									"uuid": "ed387aa8-5868-40df-b015-675f028d4641"
+								},
+								{
+									"key": "subscribedServices",
+									"value": "69479021d109f6fb9cf99654",
+									"type": "text",
+									"uuid": "8cc54bae-d70c-418e-b588-e40f6df2451a"
+								},
+								{
+									"key": "startDate",
+									"value": "12/21/2025",
+									"type": "text",
+									"uuid": "598bc09e-da90-43c5-97a8-a887254a61f3"
+								},
+								{
+									"key": "endDate",
+									"value": "12/25/2025",
+									"type": "text",
+									"uuid": "7c3353db-27d6-4d1d-826d-a7cdd3c454b5"
+								},
+								{
+									"key": "title",
+									"value": "new add",
+									"type": "text",
+									"uuid": "e498fec1-2f25-4050-b6c4-090c2396a19a"
+								},
+								{
+									"key": "description",
+									"value": "dfsdf",
+									"type": "text",
+									"uuid": "b5ae9cf1-1e0c-4048-93a5-965976081cab"
+								},
+								{
+									"key": "Image",
+									"type": "file",
+									"uuid": "c4de4dbf-3982-44e3-958a-717d4637f11a",
+									"src": "/C:/Users/ftflt/Downloads/Group 1000003280 (6) - Copy - Copy - Copy - Copy - Copy.png"
+								}
+							]
+						},
 						"url": {
-							"raw": "https://api.fetchtrue.com/api/ads?addType&category&subscribedServices&startDate&endDate&title&description&Image",
+							"raw": "https://api.fetchtrue.com/api/ads?addType=image&category=685267b06c08bf6e73a74598&subscribedServices=69479021d109f6fb9cf99654&startDate=12/21/2025&endDate=12/25/2025&title=new adv&description=fdgfdgd&Image=",
 							"protocol": "https",
 							"host": [
 								"api",
@@ -3832,35 +3885,35 @@
 							"query": [
 								{
 									"key": "addType",
-									"value": null
+									"value": "image"
 								},
 								{
 									"key": "category",
-									"value": null
+									"value": "685267b06c08bf6e73a74598"
 								},
 								{
 									"key": "subscribedServices",
-									"value": null
+									"value": "69479021d109f6fb9cf99654"
 								},
 								{
 									"key": "startDate",
-									"value": null
+									"value": "12/21/2025"
 								},
 								{
 									"key": "endDate",
-									"value": null
+									"value": "12/25/2025"
 								},
 								{
 									"key": "title",
-									"value": null
+									"value": "new adv"
 								},
 								{
 									"key": "description",
-									"value": null
+									"value": "fdgfdgd"
 								},
 								{
 									"key": "Image",
-									"value": null
+									"value": ""
 								}
 							]
 						}
