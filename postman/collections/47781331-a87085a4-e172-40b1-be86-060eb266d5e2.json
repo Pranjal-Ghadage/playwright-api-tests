@@ -3871,7 +3871,7 @@
 							]
 						},
 						"url": {
-							"raw": "https://api.fetchtrue.com/api/ads?addType=image&category=685267b06c08bf6e73a74598&subscribedServices=69479021d109f6fb9cf99654&startDate=12/21/2025&endDate=12/25/2025&title=new adv&description=fdgfdgd&Image=",
+							"raw": "https://api.fetchtrue.com/api/ads?",
 							"protocol": "https",
 							"host": [
 								"api",
@@ -3884,36 +3884,8 @@
 							],
 							"query": [
 								{
-									"key": "addType",
-									"value": "image"
-								},
-								{
-									"key": "category",
-									"value": "685267b06c08bf6e73a74598"
-								},
-								{
-									"key": "subscribedServices",
-									"value": "69479021d109f6fb9cf99654"
-								},
-								{
-									"key": "startDate",
-									"value": "12/21/2025"
-								},
-								{
-									"key": "endDate",
-									"value": "12/25/2025"
-								},
-								{
-									"key": "title",
-									"value": "new adv"
-								},
-								{
-									"key": "description",
-									"value": "fdgfdgd"
-								},
-								{
-									"key": "Image",
-									"value": ""
+									"key": "",
+									"value": null
 								}
 							]
 						}
