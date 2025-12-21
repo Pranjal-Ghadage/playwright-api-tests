@@ -3840,13 +3840,13 @@
 								},
 								{
 									"key": "startDate",
-									"value": "12/21/2025",
+									"value": "2025-06-18",
 									"type": "text",
 									"uuid": "598bc09e-da90-43c5-97a8-a887254a61f3"
 								},
 								{
 									"key": "endDate",
-									"value": "12/25/2025",
+									"value": "2025-12-20",
 									"type": "text",
 									"uuid": "7c3353db-27d6-4d1d-826d-a7cdd3c454b5"
 								},
@@ -3871,7 +3871,7 @@
 							]
 						},
 						"url": {
-							"raw": "https://api.fetchtrue.com/api/ads?",
+							"raw": "https://api.fetchtrue.com/api/ads",
 							"protocol": "https",
 							"host": [
 								"api",
@@ -3881,12 +3881,6 @@
 							"path": [
 								"api",
 								"ads"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": null
-								}
 							]
 						}
 					},
