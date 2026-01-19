@@ -4246,14 +4246,29 @@
 			"response": []
 		},
 		{
-			"name": "New Request",
+			"name": "category wise service",
 			"id": "47781331-7622a481-80b4-483d-aee1-f694a3ea75b8",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "https://api.fetchtrue.com/api/service/category-wise/683ad54ca77cf853f3209cf8",
+					"protocol": "https",
+					"host": [
+						"api",
+						"fetchtrue",
+						"com"
+					],
+					"path": [
+						"api",
+						"service",
+						"category-wise",
+						"683ad54ca77cf853f3209cf8"
+					]
+				}
 			},
 			"response": []
 		}
