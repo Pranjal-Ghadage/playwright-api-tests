@@ -4086,14 +4086,34 @@
 			"response": []
 		},
 		{
-			"name": "New Request",
+			"name": "recommend",
 			"id": "47781331-661689c7-31c7-4cfe-b66d-493b0d80c159",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "https://api.fetchtrue.com/api/service/recommended?moduleId=6822dfefe8235364b35df1a5",
+					"protocol": "https",
+					"host": [
+						"api",
+						"fetchtrue",
+						"com"
+					],
+					"path": [
+						"api",
+						"service",
+						"recommended"
+					],
+					"query": [
+						{
+							"key": "moduleId",
+							"value": "6822dfefe8235364b35df1a5"
+						}
+					]
+				}
 			},
 			"response": []
 		}
