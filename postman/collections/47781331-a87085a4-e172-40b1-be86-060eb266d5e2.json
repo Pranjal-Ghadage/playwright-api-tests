@@ -4221,7 +4221,27 @@
 			},
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "https://api.fetchtrue.com/api/service/trending?moduleId=6822dfefe8235364b35df1a5",
+					"protocol": "https",
+					"host": [
+						"api",
+						"fetchtrue",
+						"com"
+					],
+					"path": [
+						"api",
+						"service",
+						"trending"
+					],
+					"query": [
+						{
+							"key": "moduleId",
+							"value": "6822dfefe8235364b35df1a5"
+						}
+					]
+				}
 			},
 			"response": []
 		}
