@@ -4214,7 +4214,7 @@
 			"response": []
 		},
 		{
-			"name": "New Request",
+			"name": "trending",
 			"id": "47781331-be97ec4f-b1e8-4ba0-a4ac-8e7519691b97",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
