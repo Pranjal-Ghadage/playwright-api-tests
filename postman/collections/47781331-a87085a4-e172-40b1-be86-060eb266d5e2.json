@@ -4150,6 +4150,38 @@
 			"response": []
 		},
 		{
+			"name": "popular",
+			"id": "47781331-f151e1cc-8698-4ac1-a69c-117be6a8dbbf",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.fetchtrue.com/api/service/popular?moduleId=6822dfefe8235364b35df1a5",
+					"protocol": "https",
+					"host": [
+						"api",
+						"fetchtrue",
+						"com"
+					],
+					"path": [
+						"api",
+						"service",
+						"popular"
+					],
+					"query": [
+						{
+							"key": "moduleId",
+							"value": "6822dfefe8235364b35df1a5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "mostly trending",
 			"id": "47781331-5edb18cd-db9a-4ce1-8c92-75a62f6973de",
 			"protocolProfileBehavior": {
@@ -4178,18 +4210,6 @@
 						}
 					]
 				}
-			},
-			"response": []
-		},
-		{
-			"name": "New Request",
-			"id": "47781331-f151e1cc-8698-4ac1-a69c-117be6a8dbbf",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": []
 			},
 			"response": []
 		}
