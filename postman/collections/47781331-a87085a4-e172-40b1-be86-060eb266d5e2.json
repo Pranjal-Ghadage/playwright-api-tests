@@ -4273,7 +4273,7 @@
 			"response": []
 		},
 		{
-			"name": "New Request",
+			"name": "add review",
 			"id": "47781331-65543d7e-56ca-4a86-bd43-8fed5c2f53c9",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
