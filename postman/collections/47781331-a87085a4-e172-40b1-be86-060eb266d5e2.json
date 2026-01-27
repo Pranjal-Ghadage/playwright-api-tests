@@ -4279,8 +4279,31 @@
 				"disableBodyPruning": true
 			},
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"userId\": \"69428b99d6a7d5b63e92ec55\",\r\n  \"serviceId\": \"6970a9d0ce522eb03d0dce22\",\r\n  \"rating\": 4.0,\r\n  \"comment\": \"Excellent service! Very professional and on time.\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.fetchtrue.com/api/service/review",
+					"protocol": "https",
+					"host": [
+						"api",
+						"fetchtrue",
+						"com"
+					],
+					"path": [
+						"api",
+						"service",
+						"review"
+					]
+				}
 			},
 			"response": []
 		}
