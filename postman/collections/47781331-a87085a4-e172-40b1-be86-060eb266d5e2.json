@@ -338,7 +338,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"email\": \"user901@test.com\",\r\n  \"password\": \"Priyanka@123\"\r\n}",
+									"raw": "{\r\n  \"email\": \"himesh@gmail.com\",\r\n  \"password\": \"Himesh@123\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -346,16 +346,16 @@
 									}
 								},
 								"url": {
-									"raw": "https://biz-booster.vercel.app/api/auth/login",
+									"raw": "https://api.fetchtrue.com/api/provider/login",
 									"protocol": "https",
 									"host": [
-										"biz-booster",
-										"vercel",
-										"app"
+										"api",
+										"fetchtrue",
+										"com"
 									],
 									"path": [
 										"api",
-										"auth",
+										"provider",
 										"login"
 									]
 								}
