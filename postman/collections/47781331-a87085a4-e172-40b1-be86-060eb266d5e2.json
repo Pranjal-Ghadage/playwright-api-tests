@@ -4320,14 +4320,29 @@
 			"response": []
 		},
 		{
-			"name": "New Request",
+			"name": "review",
 			"id": "47781331-86b6200c-c3ac-47cf-891a-562d205cce7d",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "https://api.fetchtrue.com/api/service/review/695260289d094136051625b5",
+					"protocol": "https",
+					"host": [
+						"api",
+						"fetchtrue",
+						"com"
+					],
+					"path": [
+						"api",
+						"service",
+						"review",
+						"695260289d094136051625b5"
+					]
+				}
 			},
 			"response": []
 		}
