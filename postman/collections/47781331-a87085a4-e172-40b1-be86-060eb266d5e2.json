@@ -4345,6 +4345,18 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "top rated provider home",
+			"id": "47781331-1e3b460a-8266-4458-a6b7-5f9851332fe7",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
 		}
 	]
 }
