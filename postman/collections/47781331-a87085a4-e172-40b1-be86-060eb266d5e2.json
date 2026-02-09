@@ -4354,7 +4354,21 @@
 			},
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "https://api.fetchtrue.com/api/provider/top-rated",
+					"protocol": "https",
+					"host": [
+						"api",
+						"fetchtrue",
+						"com"
+					],
+					"path": [
+						"api",
+						"provider",
+						"top-rated"
+					]
+				}
 			},
 			"response": []
 		}
