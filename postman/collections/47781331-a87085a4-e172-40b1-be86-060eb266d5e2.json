@@ -4371,6 +4371,18 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "share 1",
+			"id": "47781331-36575550-d9a4-45a2-823c-354985fe6614",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
 		}
 	]
 }
