@@ -4383,6 +4383,18 @@
 				"header": []
 			},
 			"response": []
+		},
+		{
+			"name": "POPULAR",
+			"id": "47781331-1ff0fc4a-5540-4648-a901-d2b9f0276653",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
 		}
 	]
 }
