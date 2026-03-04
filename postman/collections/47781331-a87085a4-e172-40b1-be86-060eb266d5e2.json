@@ -4395,6 +4395,18 @@
 				"header": []
 			},
 			"response": []
+		},
+		{
+			"name": "module wise banner",
+			"id": "47781331-fbbbf768-422f-4cd8-b0c9-5590176c701b",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
 		}
 	]
 }
