@@ -3149,16 +3149,16 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://biz-booster.vercel.app/api/modules",
+							"raw": "https://api.fetchtrue.com/api/category",
 							"protocol": "https",
 							"host": [
-								"biz-booster",
-								"vercel",
-								"app"
+								"api",
+								"fetchtrue",
+								"com"
 							],
 							"path": [
 								"api",
-								"modules"
+								"category"
 							]
 						}
 					},
