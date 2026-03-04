@@ -4428,14 +4428,27 @@
 			"response": []
 		},
 		{
-			"name": "New Request",
+			"name": "subcategory details",
 			"id": "47781331-fd8523d5-eb98-4ca7-9135-a642a33b40b3",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": {
+					"raw": "https://api.fetchtrue.com/api/subcategory",
+					"protocol": "https",
+					"host": [
+						"api",
+						"fetchtrue",
+						"com"
+					],
+					"path": [
+						"api",
+						"subcategory"
+					]
+				}
 			},
 			"response": []
 		}
