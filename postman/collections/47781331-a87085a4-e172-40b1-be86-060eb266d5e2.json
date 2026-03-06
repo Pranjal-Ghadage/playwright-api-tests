@@ -4069,6 +4069,38 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "recommended provider",
+					"id": "47781331-a8b8f704-9d33-47d6-8f28-36a577331312",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.fetchtrue.com/api/provider/recommended?moduleId=6822e05ee8235364b35df1b1",
+							"protocol": "https",
+							"host": [
+								"api",
+								"fetchtrue",
+								"com"
+							],
+							"path": [
+								"api",
+								"provider",
+								"recommended"
+							],
+							"query": [
+								{
+									"key": "moduleId",
+									"value": "6822e05ee8235364b35df1b1"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"id": "47781331-cb8779cc-918c-4b5e-a681-03a1e2956014"
