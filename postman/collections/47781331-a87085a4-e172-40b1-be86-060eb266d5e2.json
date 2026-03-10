@@ -4485,7 +4485,7 @@
 			"response": []
 		},
 		{
-			"name": "New Request",
+			"name": "provider",
 			"id": "47781331-3058c280-84d1-41a2-92ce-eb0f67f4ff05",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
